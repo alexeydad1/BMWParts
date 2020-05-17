@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load static from staticfiles %}
+
+{% block title %}Контакты bmwminiparts.ru в Санкт-Петербурге{% endblock %}
+{% block breadcrumbs %} {{ block.super }} <li><a href="/contacts/">Контакты</a></li>{% endblock %}
+{% block content %}
+	<div class="medium-12 columns">
+		<script type="text/javascript" charset="utf-8" async src="https://api-maps.yandex.ru/services/constructor/1.0/js/?um=constructor%3Afc2c91fde95f908cf0cfaf4b3aa58e2f30a93dc20bf4907103e6b1552a243c93&amp;width=100%25&amp;height=330&amp;lang=ru_RU&amp;scroll=true"></script>
+		<h1 style="font-size:1.5rem;">Контакты</h1>
+		<h4 style="font-size:1.2rem;">Адреса и телефоны</h4>
+		<address style="font-style:normal;">
+			<div>Адрес: г. Санкт-Петербург, ул. Ивана Черных, д. 21 оф. 6</div>
+			<div>Телефон: +7(911) 121-62-53</div>
+		</address>
+		<div>E-mail: zakaz@bmwminiparts.ru</div>
+		<div>Социальные сети: <a href="https://vk.com/bmwminiparts" target="_blank"><img src={% static "img/vk_icon.png" %}></a></div>
+		<h4 style="font-size:1.2rem;">Часы работы</h4>
+		<div>В будние дни + суббота: с 11:00 до 19:00</div>
+		<div>Воскресенье — выходной</div>
+	</div>
+{% endblock content %}

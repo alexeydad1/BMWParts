@@ -1,0 +1,296 @@
+{% load static from staticfiles %}
+<!doctype html>
+<html class="no-js" lang="ru">
+  <head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta name="description" content="{% block description %}BmwMiniParts.ru - Интернет-магазин новых оригинальных и неоригинальных запчастей для BMW и MINI. Широкий ассортимент запчастей для BMW и Mini, в наличии и под заказ. Все автозапчасти поставляются от производителей. Низкие цены, акции, гарантия, доставка по РФ{% endblock %}">
+	<meta name="keywords" content="{% block keywords %}запчасти для BMW, запчасти для БМВ, запчасти на автомобили BMW, интернет магазин запчастей BMW, интернет магазин запчастей БМВ, продажа автозапчастей BMW, продажа автозапчастей БМВ, BMW, MINI, БМВ, МИНИ{% endblock %}">
+    <title>{% block title %}Запчасти BMW и MINI, оригинальные и качественные аналоги, купить в СПб, доставка по всей России | Добро пожаловать на BmwMiniParts.ru!{% endblock %}</title>
+	<link rel="stylesheet" href={% static "css/foundation.css" %} />
+	<link rel="stylesheet" href={% static "css/app.css" %} />
+	<link rel="shortcut icon" type="image/x-icon" href={% static "img/favicon.ico" %}>
+	<script src='https://www.google.com/recaptcha/api.js'></script>
+  </head>
+  <body>
+      <!-- Yandex.Metrika counter -->
+<script type="text/javascript" >
+    (function (d, w, c) {
+        (w[c] = w[c] || []).push(function() {
+            try {
+                w.yaCounter35182980 = new Ya.Metrika({
+                    id:35182980,
+                    clickmap:true,
+                    trackLinks:true,
+                    accurateTrackBounce:true,
+                    webvisor:true,
+                    trackHash:true
+                });
+            } catch(e) { }
+        });
+
+        var n = d.getElementsByTagName("script")[0],
+            s = d.createElement("script"),
+            f = function () { n.parentNode.insertBefore(s, n); };
+        s.type = "text/javascript";
+        s.async = true;
+        s.src = "https://mc.yandex.ru/metrika/watch.js";
+
+        if (w.opera == "[object Opera]") {
+            d.addEventListener("DOMContentLoaded", f, false);
+        } else { f(); }
+    })(document, window, "yandex_metrika_callbacks");
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/35182980" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+      
+   	<header style="margin-top:20px;padding-bottom:10px;">
+		<div class="row">
+			<div class="medium-4 columns">
+				<div class="float-left">
+					<a href="/"><img src={% static "img/logo.png" %} alt="лого bmwminiparts.ru" width="265px"/></a>
+				</div>
+			</div>
+			<div class="medium-4 columns">
+				<div class="float-left">
+					<p class="float-center" style="font-weight:600;"><span style="font-size:12px;">Санкт-Петербург</span></br>
+					<span style="font-size:12px;">+7 911</span> <span style="font-size:18px;font-weight:700;">121-62-53</span> <span style="font-size:10px;">с 11:00 до 20:00</span>
+					</p>
+				</div>
+			</div>
+			<div class="medium-4 columns">	
+					<div class="float-left">
+						<a href="/cart/" title="Корзина">
+							<img src={% static "img/cart-icon.jpg" %}>
+						</a>
+					</div>
+					<div class="float-left">
+						<p style="color:#8b9094;font-size:14px;font-weight:400;">Корзина</br><span style="display:block;margin-top:5px;color:#397bd9;font-size:12px;font-weight:600;">{{cartTotal}}</p>
+					</div>
+					<div class="float-right">
+						<div class="float-left">
+							<a href="/lk/" title="Личный кабинет"><img style="padding-top:40%;" src={% static "img/users.png" %} alt="Личный кабинет"/></a>
+						</div>	
+						<div class="float-right">
+							<ul style="padding-top:20px;font-size:12px;" class="menu">
+							{% if username%}
+								<li><a style="color:#000000;" href="/lk/logout/">Выйти ( <span style="color:#397bd9;">{{username}}</span> )</a></li>
+							{% else %}
+								<li><a style="color:#000000;padding:0px 7px;" href="/lk/login/">Войти</a></li>
+								<li style="color:#8b9094;">|</li>
+								<li><a style="color:#ff0000;padding:0px 7px;" href="/lk/singup/?next={{request.path}}">Регистрация</a></li>
+							{%endif%}
+							</ul>
+						</div>
+					</div>
+			</div>
+		</div>
+	</header>
+	<div style="height:30px;background: #f2f2f2;background: linear-gradient(to bottom, #f2f2f2, #fff);" class="row">
+	<p> </p>
+	</div>
+	<div class="row">
+        <div class="medium-12columns">
+            <div class="small-12 medium-6 columns">
+                    <div class="float-left" style="padding-top:0.5rem;">
+                      <form name="search" method="GET" action="/search">
+                        <ul class="menu">
+                          <li><input style="height:25px;font-size: 0.8rem;border-color: #000;" id="id_partnumber" maxlength="18" name="partnumber" type="text" placeholder="Поиск по номеру запчасти" value="{{p}}" size="24%"></li>
+                          <li><input style="margin-left:2px;padding:2px 7px;background-color:#397bd9;border-color:#397bd9;border-radius:6px;color:#ffffff;" type="submit" value="Найти"/></li>
+                        </ul>
+                      </form>
+                    </div>
+            </div>
+            <div class="small-12 medium-6 columns">
+                <div class="top-bar stacked-for-medium">
+                    <div style="padding-top:0.3rem;" class="top-bar-right">
+                        <ul class="menu">
+                          <li><a style="font-size:13px;font-weight:600;color:#000000;" href="/about_us/">О Нас</a></li>
+                          <li><a style="font-size:13px;font-weight:600;color:#ff0000;" href="/sale/">Акции</a></li>
+                          <li><a style="font-size:13px;font-weight:600;color:#000000;" href="/news/">Новости</a></li>
+                          <li><a style="font-size:13px;font-weight:600;color:#000000;" href="/delivery_payment/">Оплата и Доставка</a></li>
+                          <li><a style="font-size:13px;font-weight:600;color:#000000;" href="/contacts/">Контакты</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+	</div>
+	<div style="margin-top:30px;" class="row">
+		{% if request.path != '/'%}
+		 <div class="medium-12 columns">
+				<nav aria-label="Вы здесь:" role="navigation">
+					<ul class="breadcrumbs">
+					{% block breadcrumbs %}<li><a href="/">Главная</a></li>{% endblock breadcrumbs %}
+					</ul>
+				</nav>
+		 </div>
+		{%endif%}
+		{% block content %}{% endblock content %}
+	</div>
+	<div style="margin-top:30px;" class="row">
+			<div class="medium-4 columns">
+				<div class="center">
+					<a href="/to_all_bmw/">
+						<img src={% static "img/parts_to.jpg" %} alt="Запчасти для технического обслуживания" />
+					</a>
+				</div>
+				<div class="center">
+					<a href="/to_all_bmw/">
+						Запчасти для технического обслуживания
+					</a>
+				</div>
+			</div>
+			<div class="medium-4 columns">
+				<div class="center">
+					<a href="/motor_oil_technical_liquids/">
+						<img src={% static "img/oil.jpg" %} alt="Моторные и трансмиссионные масла" />
+					</a>
+				</div>
+				<div class="center">
+					<a href="/motor_oil_technical_liquids/">
+						Моторные и трансмиссионные масла
+					</a>
+				</div>
+			</div>
+			<div class="medium-4 columns">
+				<div class="center">
+					<a href="/">
+						<img src={% static "img/catalog.jpg" %} alt="Каталог оригинальных запчастей" />
+					</a>
+				</div>
+				<div class="center">
+					<a href="/">
+						Каталог оригинальных запчастей
+					</a>
+				</div>	
+			</div>
+		
+	</div>
+	<div style="background-color:#f2f2f2;margin-top:30px;" class="row">
+			<div style="padding-top:30px;"class="medium-3 columns">
+				<div class="float-left">
+					<p style="color:#808080;font-size:12px;" class="float-right">&copy; 2016 <a style="color:#808080;font-size:12px;" href="/">bmwminiparts.ru</a></br>Продажа автозапчастей и аксессуаров</p>
+				</div>
+			</div>
+			<div style="padding-top:30px;"class="medium-2 columns">
+				<div style="font-weight:600;" class="float-left">
+					<p style="color:#000;font-size:10px;" class="float-right">Санкт-Петербург</br>+7911 121-62-53 <a href="mailto:zakaz@bmwminiparts.ru">zakaz@bmwminiparts.ru</a></p>
+				</div>
+			</div>
+			<div style="padding-top:30px;"class="medium-7 columns">
+				<ul class="menu">
+						<li><a style="color:#000;font-size:12px;padding:0px 5px;" href="/sale/">Акции</a></li>
+						<li><a style="color:#000;font-size:12px;padding:0px 5px;" href="/about_us/">О Нас</a></li>
+						<li><a style="color:#000;font-size:12px;padding:0px 5px;"href="/contacts/">Контакты</a></li>
+						<li><a style="color:#000;font-size:12px;padding:0px 5px;" href="/news/">Новости</a></li>
+						<li><a style="color:#000;font-size:12px;padding:0px 5px;" href="/delivery_payment/">Оплата и Доставка</a></li>
+						<li><a style="color:#000;font-size:12px;padding:0px 5px;" href="/lk/">Личный кабинет</a></li>
+				</ul>
+			</div>
+    	</div>
+
+<script src={% static "js/vendor/jquery.min.js" %}></script>
+ <script src={% static "js/foundation.min.js" %}></script>
+	<script src={% static "js/foundation.js" %}></script>
+	<script src={% static "js/app.js" %}></script>
+
+	<script src={% static "js/maskedinput.js" %}></script>
+	<script src={% static "js/vendor/what-input.min.js" %}></script>
+	<script type="text/javascript">
+	   jQuery(function($){
+	   $("#telephone").mask("+7(999) 999-99-99");
+	   });
+	</script>
+    <script type="text/javascript" >
+        $(document).ready(function() {
+            $('.minus').click(function () {
+                var $input = $(this).parent().find('input');
+                var count = parseInt($input.val()) - 1;
+                count = count < 1 ? 1 : count;
+                $input.val(count);
+                $input.change();
+                return false;
+            });
+            $('.plus').click(function () {
+                var $input = $(this).parent().find('input');
+                $input.val(parseInt($input.val()) + 1);
+                $input.change();
+                return false;
+            });
+        });
+    </script>
+	<script type="text/javascript" >
+			$(document).ready(function() {
+			var overlay = $('#overlay');
+			var open_modal = $('.open_modal');
+			var close = $('.modal_close, #overlay');
+			var modal = $('.modal_div');
+
+			 open_modal.click( function(event){
+			  	 event.preventDefault();
+			  	 $('body').css('overflow', 'hidden');
+				 var div = $(this).attr('href');
+				 overlay.fadeIn(400,
+					 function(){
+						 $(div)
+							 .css('display', 'block')
+							 .animate({opacity: 1, top: '50%'}, 200);
+				 });
+			 });
+
+			 close.click( function(){
+			  $('body').css('overflow', 'auto');
+					modal
+					 .animate({opacity: 0, top: '45%'}, 200,
+						 function(){
+							 $(this).css('display', 'none');
+							 overlay.fadeOut(400);
+						 }
+					 );
+			 });
+		});
+	</script>
+
+<script>
+$(function(){
+
+        var field = new Array("name", "telephone", "e_mail");
+
+        $("form").submit(function() {
+            var error=0;
+            $("form").find(":input").each(function() {
+                for(var i=0;i<field.length;i++){
+                    if($(this).attr("name")==field[i]){
+
+                        if(!$(this).val()){
+                            $(this).css('border', 'red 1px solid');
+                            error=1;
+                        }
+                        else{
+                            $(this).css('border', 'gray 1px solid');
+                        }
+
+                    }
+                }
+           })
+
+            if(error==0){ // если ошибок нет то отправляем данные
+                return true;
+            }
+            else{
+            if(error==1) var err_text = "Не все обязательные поля заполнены!";
+            $("#messenger").html(err_text);
+            $("#messenger").fadeIn("slow");
+            return false;
+            }
+
+
+
+        })
+    });
+</script>
+	<div id="overlay"></div>
+  </body>
+</html>

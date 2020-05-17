@@ -1,0 +1,94 @@
+﻿{% extends "base.html" %}
+{% load static from staticfiles %}
+
+{% block title %}Заказ № {{numOrder}} | bmwminiparts.ru{% endblock %}
+{% block breadcrumbs %} {{ block.super }}<li><a href="/lk/">личный кабинет</a></li><li><a href="/lk/orders/">Заказы</a></li><li><a href="/lk/order_detail/{{numOrder}}/">Заказ № {{numOrder}}</a></li>{% endblock %}
+{% block content %}
+{% include "lk/lk_menu.html" %}
+	<div class="medium-12 columns">
+		<div  class="lk_col">
+		<div class="medium-12 columns">
+
+		<h1 style="font-size:18px;">Заказ № {{numOrder}}</h1>
+            <h5 style="font-size:18px;">Статус заказа: <span style="color:{{statusO.color}};">{{statusO}}</span></h5>
+			<div>Дата заказа: {{orderPrice.created_at}}</div>
+			<div>Клиент: {{orderPrice.accounts.get_full_name}}</div>
+			<div>Адрес доставки: {{orderPrice.address}}</div>
+			<div>Телефон: {{orderPrice.accounts.telephone}}</div>
+			<div>E-mail: {{orderPrice.accounts.email}}</div>
+			<div>Комментарий: {{orderPrice.comment}}</div>
+            {% if user.is_staff %}
+            {% for s in status %}
+            <div class="float-left">
+                <form action="/lk/order_detail/{{numOrder}}/" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="status" value="{{s.pk}}">
+                    <input type="submit" style="color:{{s.color}};padding:10px;margin:10px 5px;border:1px solid #2199e8;" value="{{s.name}}">
+                </form>
+            </div>
+            {% endfor %}
+            {% endif %}
+			<table class="stack" width="100%">
+					<thead >
+					<tr style="text-align: center;">
+                        <th>№</th>
+						<th width=80px>Бренд</th></th>
+						<th width=80px>Номер запчасти</th>
+						<th>Описание</th>
+						<th width=50px>Цена</th>
+						<th width=50px>Количество</th>
+						<th width=50px>Сумма</th>
+					</tr>
+					</thead>
+			{% if order%}
+					<tbody>
+						{% for item in order %}
+						<tr>
+                            <td align="center">{{forloop.counter}}</td>
+							<td>{{item.product.producer}}</td>
+							{% if user.is_staff %}
+								{% if item.status_order == 0 %}
+								<td>{{item.product}}</td>
+								{% elif item.status_order == 1 %}
+								<td><a style="color:blue;" href="/lk/invoice/{{item.invoice.pk}}/">{{item.product}}</a></td>
+								{% elif item.status_order == 2 %}
+								<td><a style="color:green;" href="/lk/invoice/{{item.invoice.pk}}/">{{item.product}}</a></td>
+								{% elif item.status_order == 3 %}
+								<td><a style="color:orange;" href="/lk/invoice/{{item.invoice.pk}}/">{{item.product}}</a></td>
+								{% elif item.status_order == 4 %}
+								<td><a style="color:red;" href="/lk/invoice/{{item.invoice.pk}}/">{{item.product}}</a></td>
+								{% endif %}
+							{% else %}
+								{% if item.status_order == 0 %}
+								<td>{{item.product}}</td>
+								{% elif item.status_order == 1 %}
+								<td style="color:blue;">{{item.product}}</td>
+								{% elif item.status_order == 2 %}
+								<td style="color:green;">{{item.product}}</td>
+								{% elif item.status_order == 3 %}
+								<td style="color:orange;">{{item.product}}</td>
+								{% elif item.status_order == 4 %}
+								<td style="color:red;">{{item.product}}</td>
+								{% endif %}
+							{% endif %}
+							<td>{{item.product.description}}</td>
+							<td align="center">{{item.price_sale}}</td>
+							<td align="center">{{item.count}}</td>
+							<td align="center">{{item.price}}</td>
+						</tr>
+						{% endfor %}
+						<tr>
+							<td colspan="6" align="right">Итого:</td>
+							<td>{{orderPrice.price}}</td>
+						</tr>
+					</tbody>
+		{% else %}
+			<div class="small-6 medium-12 columns">
+				<p class="text-center"><font color="#ff0000">{{ error_request}}</font></p>
+			</div>
+		{% endif %}
+		</table>
+		</div>
+		</div>
+		</div>
+{% endblock content %}

@@ -1,0 +1,273 @@
+{% load static from staticfiles %}
+<!doctype html>
+<html class="no-js" lang="ru">
+  <head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta name="description" content="{% block description %}BmwMiniParts.ru - Интернет-магазин новых оригинальных и неоригинальных запчастей для BMW и MINI. Широкий ассортимент запчастей для BMW и Mini, в наличии и под заказ. Все автозапчасти поставляются от производителей. Низкие цены, акции, гарантия, доставка по РФ{% endblock %}">
+	<meta name="keywords" content="{% block keywords %}запчасти для BMW, запчасти для БМВ, запчасти на автомобили BMW, интернет магазин запчастей BMW, интернет магазин запчастей БМВ, продажа автозапчастей BMW, продажа автозапчастей БМВ, BMW, MINI, БМВ, МИНИ{% endblock %}">
+    <title>{% block title %}Запчасти BMW и MINI, оригинальные и качественные аналоги, купить в СПб, доставка по всей России | Добро пожаловать на BmwMiniParts.ru!{% endblock %}</title>
+	<link rel="stylesheet" href={% static "css/foundation.css" %} />
+	<link rel="stylesheet" href={% static "css/app.css" %} />
+	<link rel="shortcut icon" type="image/x-icon" href={% static "img/favicon.ico" %}>
+
+
+  </head>
+  <body>
+  
+ <!-- ШАПКА   -->
+ <center><h1 style="color:red;">ЛОКАЛЬНЫЙ СЕРВЕР!!!!!!!!!!!!!!!!!!!!!!!!!!!</h1></center>
+ 	<header>
+		<div style="margin:10px 0px;" class="row">
+			<div class="medium-4 columns">
+				<div class="float-left">
+					<a href="/"><img src={% static "img/logo.png" %} alt="лого bmwminiparts.ru" width="265px"/></a>
+				</div>
+			</div>
+			<div class="medium-4 columns">
+				<div class="float-left">
+					<p class="float-center" style="font-weight:600;"><span style="font-size:12px;">Санкт-Петербург</span></br>
+					<span style="font-size:12px;">+7 911</span> <span style="font-size:18px;font-weight:700;">121-62-53</span> <span style="font-size:10px;">с 11:00 до 20:00</span>
+					</p>
+				</div>
+			</div>
+			<div class="medium-4 columns">	
+					<div class="float-left">
+						<a href="/cart/" title="Корзина">
+							<img src={% static "img/cart-icon.jpg" %}>
+						</a>
+					</div>
+					<div class="float-left">
+						<p style="color:#8b9094;font-size:14px;font-weight:400;">Корзина</br><span style="display:block;margin-top:5px;color:#397bd9;font-size:12px;font-weight:600;">{{cartTotal}}</p>
+					</div>
+					<div class="float-right">
+						<div class="float-left">
+							<a href="/lk/" title="Личный кабинет"><img style="padding-top:40%;" src={% static "img/users.png" %} alt="Личный кабинет"/></a>
+						</div>	
+						<div class="float-right">
+							<ul style="padding-top:20px;font-size:12px;" class="menu">
+							{% if username%}
+								<li><a style="color:#000000;" href="/lk/logout/">Выйти ( <span style="color:#397bd9;">{{username}}</span> )</a></li>
+							{% else %}
+								<li><a style="color:#000000;padding:0px 7px;" href="/lk/login/">Войти</a></li>
+								<li style="color:#8b9094;">|</li>
+								<li><a style="color:#ff0000;padding:0px 7px;" href="/lk/singup/?next={{request.path}}">Регистрация</a></li>
+							{%endif%}
+							</ul>
+						</div>
+					</div>
+			</div>
+			
+		</div>
+	</header>
+<!-- Меню и поиск   -->	
+	<div style="height:30px;background: #f2f2f2;background: linear-gradient(to bottom, #f2f2f2, #fff);" class="row">
+	<p> </p>
+	</div>
+	<div class="row">
+		<div class="medium-6 columns">
+				<div class="float-left" style="padding-top:0.5rem;">
+				  <form name="search" method="GET" action="/search">
+
+					<ul class="menu">
+					  <li><input style="height:25px;font-size: 0.8rem;border-color: #000;" id="id_partnumber" maxlength="18" name="partnumber" type="text" placeholder="Поиск по номеру запчасти" value="{{p}}" size="24%"></li>
+					  <li><input style="background-color:#397bd9;border-color:#397bd9;border-radius:2px;color:#ffffff;" type="submit" value="Найти"/></li>
+                    </ul>
+				  </form>
+				</div>
+         <!--       <div style="padding-top:0.5rem;">
+				  <form name="search" method="POST" action="/catalog_online/">
+                   {% csrf_token %}
+					<ul class="menu">
+					  <li><input style="height:25px;font-size: 0.8rem;border-color: #000;margin-left:20px;" id="id_vin" maxlength="18" name="vin" type="text" placeholder="Поиск по VIN" value="" size="20%"></li>
+					  <li><input style="margin-left:10px;background-color:#397bd9;border-color:#397bd9;border-radius:2px;color:#ffffff;" type="submit" value="Найти"/></li>
+                    </ul>
+				  </form>
+				</div> -->
+		</div>
+		<div class="medium-6 columns">
+			<div class="top-bar stacked-for-medium">
+				<div style="padding-top:0.3rem;" class="top-bar-right">
+					<ul class="menu">
+                      <!--<li><a style="font-size:14px;background-color:#397bd9;border-color:#397bd9;border-radius:2px;color:#ffffff;padding:6px;" href="/catalog_online/">Поиск по модели</a></li>-->
+					  <li><a style="font-size:13px;font-weight:600;color:#000000;" href="/about_us/">О Нас</a></li>
+					  <li><a style="font-size:13px;font-weight:600;color:#ff0000;" href="/sale/">Акции</a></li>
+					  <li><a style="font-size:13px;font-weight:600;color:#000000;" href="/news/">Новости</a></li>
+					  <li><a style="font-size:13px;font-weight:600;color:#000000;" href="/contacts/">Контакты</a></li>
+					</ul>
+				</div>
+    		</div>
+		</div>
+	</div>
+	<div style="margin-top:30px;" class="row">
+	{% if request.path != '/'%}
+     <div class="medium-12 columns">
+			<nav aria-label="Вы здесь:" role="navigation">
+				<ul class="breadcrumbs">
+				{% block breadcrumbs %}<li><a href="/">Главная</a></li>{% endblock breadcrumbs %}
+				</ul>
+			</nav>
+     </div>
+    {%endif%}
+			<!-- Контент   -->		
+						<!-- Контент/10 колонок -->
+						{% block content %}{% endblock content %}
+		
+	</div>
+	<div style="margin-top:30px;" class="row">
+			<div class="medium-4 columns">
+				<div class="center">
+					<a href="/to_all_bmw/">
+						<img src={% static "img/parts_to.jpg" %} alt="Запчасти для технического обслуживания" />
+					</a>
+				</div>
+				<div class="center">
+					<a href="/to_all_bmw/">
+						Запчасти для технического обслуживания
+					</a>
+				</div>
+			</div>
+			<div class="medium-4 columns">
+				<div class="center">
+					<a href="/motor_oil_technical_liquids/">
+						<img src={% static "img/oil.jpg" %} alt="Моторные и трансмиссионные масла" />
+					</a>
+				</div>
+				<div class="center">
+					<a href="/motor_oil_technical_liquids/">
+						Моторные и трансмиссионные масла
+					</a>
+				</div>
+			</div>
+			<div class="medium-4 columns">
+				<div class="center">
+					<a href="/motor_oil_technical_liquids">
+						<img src={% static "img/catalog.jpg" %} alt="Каталог оригинальных запчастей" />
+					</a>
+				</div>
+				<div class="center">
+					<a href="/">
+						Каталог оригинальных запчастей
+					</a>
+				</div>	
+			</div>
+		
+	</div>
+	
+	<div style="margin-top:30px;" class="row">
+			<div class="medium-3 columns">
+				<h5>ИНФОРМАЦИЯ</h5>
+				<a style="color:#397bd9;font-size:12px;" href="#">Когда следует менять масло</a></br>
+				<a style="color:#397bd9;font-size:12px;" href="#">Сколько ходят тормозные колодки</a></br>
+				<a style="color:#397bd9;font-size:12px;" href="#">Если увеличился расход топлива</a></br>
+				<a style="color:#397bd9;font-size:12px;" href="#">Как сохранить компрессор</a></br>
+				<a style="color:#000;font-size:12px;text-decoration:underline;" href="#">Читать еще</a>
+			</div>
+			<div class="medium-9 columns">
+				<h5>НОВОСТИ</h5>
+				<a style="color:#000;font-size:12px;" href="#"><span style="color:#808080;">13.08.16</span> При покупке зимних колес летом - бесплатная замена масла и колес в случае повреждений</a></br>
+				<a style="color:#000;font-size:12px;" href="#"><span style="color:#808080;">10.08.16</span> При оплате за наличный расчет - скидка 20% на оригинальные лобовые стекла</a></br>
+				<a style="color:#000;font-size:12px;" href="#"><span style="color:#808080;">01.08.16</span> При покупке зимних колес летом - бесплатная замена масла и колес в случае повреждений</a></br>
+				<a style="color:#000;font-size:12px;" href="#"><span style="color:#808080;">30.07.16</span> При оплате за наличный расчет - скидка 20% на оригинальные лобовые стекла</a></br>
+				<a style="color:#000;font-size:12px;text-decoration:underline;" href="#">Читать еще</a>
+			</div>
+				
+	</div>
+			
+		
+<!-- Подвал   -->				
+		<div style="background-color:#f2f2f2;margin-top:30px;" class="row">
+			<div style="padding-top:30px;"class="medium-3 columns">
+				<div class="float-left">
+					<p style="color:#808080;font-size:12px;" class="float-right">&copy; 2016 <a style="color:#808080;font-size:12px;" href="/">bmwminiparts.ru</a></br>Продажа автозапчастей и аксессуаров</p>
+				</div>
+			</div>
+			<div style="padding-top:30px;"class="medium-2 columns">
+				<div style="font-weight:600;" class="float-left">
+					<p style="color:#000;font-size:10px;" class="float-right">Санкт-Петербург</br>+7911 121-62-53 <a href="mailto:zakaz@bmwminiparts.ru">zakaz@bmwminiparts.ru</a></p>
+				</div>
+			</div>
+			<div style="padding-top:30px;"class="medium-7 columns">
+				<ul class="menu">
+						<li><a style="color:#000;font-size:12px;padding:0px 5px;" href="/sale/">Акции</a></li>
+						<li><a style="color:#000;font-size:12px;padding:0px 5px;" href="/about_us/">О Нас</a></li>
+						<li><a style="color:#000;font-size:12px;padding:0px 5px;"href="/contacts/">Контакты</a></li>
+						<li><a style="color:#000;font-size:12px;padding:0px 5px;" href="/news/">Новости</a></li>
+						<li><a style="color:#000;font-size:12px;padding:0px 5px;" href="/delivery_payment/">Оплата и Доставка</a></li>
+						<li><a style="color:#000;font-size:12px;padding:0px 5px;" href="/lk/">Личный кабинет</a></li>
+				</ul>
+			</div>
+    	</div>
+
+<script src={% static "js/vendor/jquery.min.js" %}></script>
+ <script src={% static "js/foundation.min.js" %}></script>
+	<script src={% static "js/foundation.js" %}></script>
+	<script src={% static "js/app.js" %}></script>
+
+	<script src={% static "js/maskedinput.js" %}></script>
+	<script src={% static "js/vendor/what-input.min.js" %}></script>
+	<script type="text/javascript">
+	   jQuery(function($){
+	   $("#telephone").mask("+7(999) 999-99-99");
+	   });
+	</script>
+    <script type="text/javascript">
+	   jQuery(function($){
+	   $("#id_phone").mask("+7(999) 999-99-99");
+	   });
+	</script>
+	<script type="text/javascript" >
+        $(document).ready(function() {
+            $('.minus').click(function () {
+                var $input = $(this).parent().find('input');
+                var count = parseInt($input.val()) - 1;
+                count = count < 1 ? 1 : count;
+                $input.val(count);
+                $input.change();
+                return false;
+            });
+            $('.plus').click(function () {
+                var $input = $(this).parent().find('input');
+                $input.val(parseInt($input.val()) + 1);
+                $input.change();
+                return false;
+            });
+        });
+    </script>
+	<script type="text/javascript" >
+			$(document).ready(function() { // зaпускaем скрипт пoсле зaгрузки всех элементoв
+			/* зaсунем срaзу все элементы в переменные, чтoбы скрипту не прихoдилoсь их кaждый рaз искaть при кликaх */
+			var overlay = $('#overlay'); // пoдлoжкa, дoлжнa быть oднa нa стрaнице
+			var open_modal = $('.open_modal'); // все ссылки, кoтoрые будут oткрывaть oкнa
+			var close = $('.modal_close, #overlay'); // все, чтo зaкрывaет мoдaльнoе oкнo, т.е. крестик и oверлэй-пoдлoжкa
+			var modal = $('.modal_div'); // все скрытые мoдaльные oкнa
+
+			 open_modal.click( function(event){ // лoвим клик пo ссылке с клaссoм open_modal
+			  	 event.preventDefault(); // вырубaем стaндaртнoе пoведение
+			  	 $('body').css('overflow', 'hidden'); // выключаем скролл
+				 var div = $(this).attr('href'); // вoзьмем стрoку с селектoрoм у кликнутoй ссылки
+				 overlay.fadeIn(400, //пoкaзывaем oверлэй
+					 function(){ // пoсле oкoнчaния пoкaзывaния oверлэя
+						 $(div) // берем стрoку с селектoрoм и делaем из нее jquery oбъект
+							 .css('display', 'block')
+							 .animate({opacity: 1, top: '50%'}, 200); // плaвнo пoкaзывaем
+				 });
+			 });
+
+			 close.click( function(){ // лoвим клик пo крестику или oверлэю
+			  $('body').css('overflow', 'auto'); // включаем скролл
+					modal // все мoдaльные oкнa
+					 .animate({opacity: 0, top: '45%'}, 200, // плaвнo прячем
+						 function(){ // пoсле этoгo
+							 $(this).css('display', 'none');
+							 overlay.fadeOut(400); // прячем пoдлoжку
+						 }
+					 );
+			 });
+		});
+	</script>
+
+	<div id="overlay"></div>
+  </body>
+</html>

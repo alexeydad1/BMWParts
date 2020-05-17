@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load static from staticfiles %}
+
+{% block title %}Заказы поставщикам | bmwminiparts.ru{% endblock %}
+{% block breadcrumbs %} {{ block.super }} <li><a href="/lk/">личный кабинет</a></li><li><a href="/lk/offers/">Заявки</a></li>{% endblock %}
+{% block content %}
+
+
+{% include "lk/lk_menu.html" %}
+
+<div class="medium-12 columns">
+		<h1 style="font-size:18px;">Заказы поставщикам</h1>
+		<h8>Позиции заявки:</h8>
+		<table class="stack" width="100%">
+					<thead >
+						<tr>
+                            <th>№</th>
+                            <th>Склад</th>
+							<th>Бренд</th>
+							<th>Номер запчасти</th>
+							<th>Описание</th>
+							<th>Кол-во</th>
+							<th>ЗАКУПКА</th>
+							<th>Цена</th>
+                        </tr>
+					</thead>
+			{% if itemOffer%}
+					<tbody>
+						{% for item in itemOffer %}
+						<tr>
+                            <td align="center">{{forloop.counter}}</td>
+                            <td>{{item.stock}}</td>
+							<td style="color:#397bd9;font-weight:600;">{{item.brand}}</td>
+							<td>{{item.product}}</td>
+							<td>{{item.product.description}}</td>
+							<td>{{item.quantity}}</td>
+							<td>{{item.purchase_price}} </td>
+							<td style="color:#397bd9;font-weight:600;">{{item.unit_price}} </td>
+						</tr>
+						{% endfor %}
+					</tbody>
+			{% endif %}
+			</table>
+            </div>
+
+
+</div>
+
+
+{% endblock content %}

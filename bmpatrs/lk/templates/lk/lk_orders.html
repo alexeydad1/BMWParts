@@ -1,0 +1,70 @@
+﻿{% extends "base.html" %}
+{% load static from staticfiles %}
+
+{% block title %}Заказы | bmwminiparts.ru{% endblock %}
+{% block breadcrumbs %} {{ block.super }} <li><a href="/lk/">личный кабинет</a></li><li><a href="/lk/orders/">Заказы</a></li>{% endblock %}
+{% block content %}
+{% include "lk/lk_menu.html" %}
+	<div class="medium-12 columns">
+	<div  class="lk_col">
+		<div class="medium-12 columns">
+			<h6>Всего заказов: {{countOrders}} на сумму: {{totalOrders}} </h6>
+			<div>В статусах:</div>
+           	<table class="stack" width="100%">
+				<tr>
+				{% for item in orderStatus %}
+							{% for status in item %}
+								<td style="color:{{status.color}};">{% cycle status status|length %}</td>
+							{% endfor %}
+				{% endfor %}
+				</tr>
+			</table>
+             {% if user.is_staff %}
+                <form action="/lk/orders/" method="POST">
+                    {% csrf_token %}
+                    {{ find_form.as_p }}
+                    <input type="submit" value="Показать" />
+                </form>
+            {% endif %}
+			<table class="stack" width="100%">
+					<thead >
+					<tr>
+                        <th style="width:5%;">№</th>
+						<th style="width:15%;">№ Заказа</th>
+						<th style="width:20%;">Дата оформления</th>
+						<th style="width:20%;text-align:center;">Статус</th>
+						<th style="width:40%;text-align:center;">Сумма</th>
+                        {% if user.is_staff %}
+                        <th style="width:40%;text-align:center;">Клиент</th>
+                        <th style="width:40%;text-align:center;">Телефон</th>
+                        {% endif %}
+     				</tr>
+					</thead>
+			{% if orders%}
+					<tbody>
+						{% for item in orders %}
+						<tr>
+                            <td align="center">{{forloop.counter}}</td>
+							<td style="font-weight: bold;">
+								<a href="/lk/order_detail/{{item.number_order}}/">{{item.number_order}}</a>
+							</td>
+							<td>{{item.created_at|date:"d.m.Y / H:i"}}</td>
+							<td style="font-weight: bold;text-align:center;color:{{item.status.color}};">{{item.status}}</td>
+							<td style="font-weight: bold;text-align:center;color:#397bd9;">{{item.price}}</td>
+                            {% if user.is_staff %}
+                             <td>{{item.accounts.get_full_name}}</td>
+                             <td>{{item.accounts.telephone}}</td>
+                            {% endif %}
+						</tr>
+						{% endfor %}
+					</tbody>
+		{% else %}
+			<div class="small-6 medium-12 columns">
+				<p class="text-center"><font color="#ff0000">{{ error_request}}</font></p>
+			</div>
+		{% endif %}
+		</table>
+		</div>
+		</div>
+		</div>
+{% endblock content %}

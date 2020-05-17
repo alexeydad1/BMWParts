@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Регистрация | bmwminiparts.ru{% endblock %}
+{% block breadcrumbs %} {{ block.super }} <li><a href="/lk/singup/">Регистрация</a></li>{% endblock %}
+{% block content %}
+
+<div class="small-4 large-offset-4 columns">
+<h4>Регистрация</h4>
+	
+	<form action='/lk/singup/' method='post' name='singup'>{% csrf_token %}
+		{{ form }}
+		<br/>
+		<div class="g-recaptcha" data-sitekey="6LdHVDIUAAAAADirn4Ib5VXNXeFEkRgEzp3Vu7PS"></div>
+		<input class="button" type="submit" value="Зарегистрировать" />
+ 
+	</form>
+</div>
+{% endblock content %}

@@ -1,0 +1,567 @@
+{% extends "base.html" %}
+{% load floattags %}
+{% load static from staticfiles %}
+
+{% block title %}Зявки | bmwminiparts.ru{% endblock %}
+{% block breadcrumbs %} {{ block.super }} <li><a href="/lk/">личный кабинет</a></li><li><a href="/lk/offers/">Заявки</a></li>{% endblock %}
+{% block content %}
+ <script type="text/javascript">
+            /**
+            * Функция Скрывает/Показывает блок
+            * @author ox2.ru дизайн студия
+            **/
+            function showHide(element_class) {
+                //Если элемент с id-шником element_id существует
+				if (document.getElementsByClassName(element_class)) {
+                    //Записываем ссылку на элемент в переменную obj
+                    var obj = document.getElementsByClassName(element_class);
+                    for (var i = 0; i <obj.length; i++) {
+
+						//Если css-свойство display не block, то:
+						if (obj[i].style.display != "table-row") {
+							obj[i].style.display = "table-row"; //Показываем элемент
+						}
+					   else obj[i].style.display = "none"; //Скрываем элемент
+                   }
+                }
+                //Если элемент с id-шником element_id не найден, то выводим сообщение
+                else alert("Элемент с id: " + element_class + " не найден!");
+            }
+
+
+</script>
+<script language="javascript" type="text/javascript">
+<!--
+function popitup(url,title) {
+    newwindow=window.open(url,title,'height=600,width=400,left=400,top=200');
+    if (window.focus) {newwindow.focus()}
+    return false;
+}
+
+// -->
+</script>
+
+<style>
+	.block_id{
+		display:none;
+	}
+	.discount{
+			display:inline-block;
+			margin-top:13px;
+			height:24px;
+			text-align:center;
+			width:40px;
+		}
+    span {cursor:pointer; }
+
+		.minus_d, .plus_d{
+			display:inline-block;
+			margin-top:12px;
+			font-size:14px;
+			font-weight:600;
+			width:25px;
+			background:#f2f2f2;
+			border-radius:4px;
+			padding:6px 4px 6px 4px;
+			border:1px solid #ddd;
+			text-align:center;
+		}
+  		.offer_qty{
+			display:inline-block;
+			margin-top:13px;
+			height:24px;
+			text-align:center;
+			width:40px;
+		}
+		span {cursor:pointer; }
+
+		.minus, .plus{
+			display:inline-block;
+			margin-top:12px;
+			font-size:14px;
+			font-weight:600;
+			width:25px;
+			background:#f2f2f2;
+			border-radius:4px;
+			padding:6px 4px 6px 4px;
+			border:1px solid #ddd;
+			text-align:center;
+		}
+
+</style>
+
+{% include "lk/lk_menu.html" %}
+<div class="medium-12 columns">
+	<div  class="lk_col">
+<div class="medium-12 columns">
+
+	<details>
+		<div class="row">
+			<div class="medium-5 columns">
+				<h5>Моторные масла</h5>
+					{% for link in oil_link %}
+					<div>
+						<form name="search" method="GET" action="/search">
+							<span style="font-size:11px;"><input type="submit" value="{{link.partnumber}}">  -  {{link.description}}</span>
+							<input id="id_partnumber" name="partnumber" type="hidden" value="{{link.partnumber}}">
+						</form>
+					</div>
+					{% endfor %}
+
+			</div>
+			<div class="medium-5 float-left columns">
+				<h5>Технические жидкости</h5>
+				{% for link in liquids_link %}
+				<div>
+					<form name="search" method="GET" action="/search">
+						<span style="font-size:11px;"><input type="submit" value="{{link.partnumber}}">  -  {{link.description}}</span>
+						<input id="id_partnumber" name="partnumber" type="hidden" value="{{link.partnumber}}">
+					</form>
+				</div>
+				{% endfor %}
+			</div>
+	</div>
+	</details>
+</div>
+<div class="medium-12 columns">
+	<h1 style="font-size:18px;">Заявка №{{offer.pk}}</h1>
+    {% if form.customer.value != null%}
+        <details>
+    {% else %}
+        <details open="open">
+    {% endif %}
+	    <summary><span style="color:#397bd9;font-weight:bold;">Показать данные Заявки</span></summary>
+             <div class="row" >
+                <form name="offer" method="POST" action="/lk/offer_save/{{offer.pk}}/" >
+                    <div class="medium-4 columns">
+                        {% csrf_token %}
+                        {{ form.non_field_errors }}
+                            <div>
+                                {{ form.status.errors }}
+                                <label for="id_status">Статус:</label>
+                                {{ form.status }}
+                            </div>
+                             <div class="float-left">
+                                    {{ form.comment.errors }}
+                                    <label for="id_comment">Комментарий:</label>
+                                    {{ form.comment }}
+                             </div>
+                            <div class="float-left">
+                                    {{ form.discount.errors }}
+                                    <label for="id_discount" style="color:red;">Скидка:</label>
+                                    <span class="minus_d">-</span>
+                                    {{ form.discount }}
+                                    <span class="plus_d">+</span>
+                             </div>
+                            <div class="row">
+                                <div class="medium-10 columns">
+                                <input style="margin-bottom:10px;background-color:#397bd9;border-color:#397bd9;border-radius:2px;color:#ffffff;" type="submit" value="Сохранить"/>
+                                </div>
+                            </div>
+                    </div>
+                  {% if form.customer.value != null %}
+                    <div class="medium-4 float-left columns">
+							<div>
+                                    <label>Клиент:</label>
+							</div>
+							<div style="border:1px solid black;padding:0 5px;font-weight:600;">
+                                    <a href="/lk/customer/{{customer.pk}}/">{{customer.fio}}</a>
+                                    <input type="hidden" name="id_customer" value="{{customer.pk}}">
+                            </div>
+                            <div>
+                                {{ form.phone.errors }}
+                                <label for="id_phone">Телефон:</label>
+                                {{ form.phone }}
+                            </div>
+                            <div >
+                                {{ form.vin.errors }}
+                                <label for="id_vin">VIN:</label>
+                                {{ form.vin }}
+                            </div>
+                    </div>
+                 </form>
+                    {% else %}
+                 </form>
+                  <div class="medium-4 float-left columns">
+                        <form name="offer" method="POST" action="/lk/search_customer/">
+                            {% csrf_token %}
+                            <label for="customer" style="color:red;">Поиск клиента:</label>
+                            <input style="float:left;padding:0 5px;height:25px;font-size: 0.8rem;border-color: #000;" name="customer" type="text" value="" placeholder="Введите Имя, Фамилию, Телефон, VIN или Email"/>
+                            <input style="float:left;margin-bottom:10px;background-color:#397bd9;border-color:#397bd9;border-radius:2px;color:#ffffff;" type="submit" value="Найти"/>
+                        </form>
+                        {% if customers %}
+                        <table class="stack" width="100%">
+                            <thead >
+                            <tr style="text-align: center;">
+                                <th>№</th>
+                                <th width=80px>Создан</th>
+                                <th width=50px>Ф.И.О</th>
+                                <th>Телефон</th>
+                                <th>E-mail</th>
+                                <th>VIN</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for item in customers %}
+                                <tr>
+									<td align="center">{{forloop.counter}}</td>
+                                    <td>{{item.created_at}}</td>
+                                    <td style="font-weight: bold;">
+                                        <a href="/lk/customer_offer_add/{{item.pk}}/{{offer.pk}}/">{{item.fio}}</a>
+                                    </td>
+                                    <td>{{item.phone}}</td>
+                                    <td>{{item.email}}</td>
+                                    <td>{{item.vin}}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+
+                            </table>
+                         {% endif %}
+                     </div>
+                {% endif %}
+             </div>
+	</details>
+        <div class="row">
+            <div class="medium-12 columns">
+                <div class="float-right">
+                        <button onclick="showHide('block_id')" style="margin-left:10px;margin-bottom:10px;padding:7px 7px;background-color:#397bd9;border-color:#397bd9;border-radius:6px;color:#ffffff;">Показать/Скрыть</button>
+                </div>
+
+            </div>
+         </div>
+        <div class="float-left">
+		{% if error_request %}
+			<div class="medium-12 columns">
+				<p class="text-center"><font color="#ff0000">{{error_request}}</font></p>
+			</div>
+		{% endif %}
+		{% if parts %}
+        <h7>Запрошенный артикул:</h7>
+		<table class="stack" width="100%">
+					<thead >
+						<tr>
+                            <th>№</th>
+							<th class="block_id">Склад</th>
+							<th>Бренд</th>
+							<th>Номер запчасти</th>
+							<th>Описание</th>
+							<th>Кол-во</th>
+							<th>Срок доставки</th>
+							<th class="block_id" style="color:red;">ЗАКУПКА</th>
+							<th>Цена</th>
+							<th>Цена ДИЛЕРА</th>
+							{% if form.status.value == 1 %}
+							<th><img src={% static "img/shop_cart.png" %} width=32px></th>
+							{% endif %}
+						</tr>
+					</thead>
+
+					<tbody>
+						{% for price in parts %}
+						<tr>
+							<td align="center">{{forloop.counter}}</td>
+							<td class="block_id" style="width:10%;color:#397bd9;font-size:12px;font-weight:600;">{{price.stock}}</td>
+							<td style="width:5%;color:#397bd9;font-size:12px;font-weight:600;">{{price.producer}}</td>
+							<td style="width:5%;">{{price.p_product}}</td>
+							<td style="width:45%;">{{price.description}}</td>
+							<td style="width:15%;">{{price.qty}}</td>
+							<td style="width:5%;">{{price.delivery_time}} </td>
+							<td class="block_id" style="width:5%;color:red;font-weight:600;">{{price.purchase_price}} </td>
+							<td style="width:5%;color:#397bd9;font-weight:600;" onmouseover="document.getElementById('date_price_{{forloop.counter}}').style.display='block';" onmouseout="document.getElementById('date_price_{{forloop.counter}}').style.display='none';">
+                         	{{price.our_price}}
+                            <span id="date_price_{{forloop.counter}}" class="hovertip">Дата обновления</br>{{price.created_at}}</span>
+							</td>
+							<td>{{price.dealer_price}}</td>
+							{% if form.status.value == 1 %}
+							<td style="width:5%;"><a href="/add_to_offer/{{price.p_product}}_{{price.id_stock}}_{{price.producer_pk}}_{{offer.pk}}/"><img src={% static "img/shop_cart.png" %} width=32px></a></td>
+							{% endif %}
+						</tr>
+						{% endfor %}
+
+					</tbody>
+
+			</table>
+		{% endif %}
+		{% if no_price %}
+        <h7>Запрошенный артикул:</h7>
+		<table class="stack" width="100%">
+					<thead >
+						<tr>
+                            <th>№</th>
+							<th class="block_id">Склад</th>
+							<th>Бренд</th>
+							<th>Номер запчасти</th>
+							<th>Описание</th>
+							<th>Кол-во</th>
+							<th>Срок доставки</th>
+							<th class="block_id" style="color:red;">ЗАКУПКА</th>
+							<th>Цена</th>
+							{% if form.status.value == 1 %}
+							<th><img src={% static "img/shop_cart.png" %} width=32px></th>
+							{% endif %}
+						</tr>
+					</thead>
+
+					<tbody>
+						{% for price in no_price %}
+						<tr>
+							<td align="center">{{forloop.counter}}</td>
+							<td class="block_id" style="width:10%;color:#397bd9;font-size:12px;font-weight:600;">{{price.stock}}</td>
+							<td style="width:5%;color:#397bd9;font-size:12px;font-weight:600;">{{price.producer}}</td>
+							<td style="width:5%;">{{price.partnumber}}</td>
+							<td style="width:45%;">{{price.description}}</td>
+							<td style="width:15%;">---</td>
+							<td style="width:5%;">---</td>
+							<td class="block_id" style="width:5%;color:red;font-weight:600;">---</td>
+							<td style="width:5%;color:#397bd9;font-weight:600;">---</td>
+							{% if form.status.value == 1 %}
+							<td style="width:5%;"><img src={% static "img/shop_cart.png" %} width=32px></a></td>
+							{% endif %}
+						</tr>
+						{% endfor %}
+
+					</tbody>
+
+			</table>
+		{% endif %}
+        {% if parts_cross%}
+            <h7>Аналоги:</h7>
+            <table class="stack" width="100%">
+					<thead >
+						<tr>
+                            <th>№</th>
+							<th class="block_id" style="width:10%;">Склад</th>
+							<th style="width:5%;">Бренд</th>
+							<th style="width:5%;">Номер запчасти</th>
+							<th style="width:45%;">Описание</th>
+							<th style="width:15%;">Кол-во</th>
+							<th style="width:5%;">Срок доставки</th>
+							<th class="block_id" style="color:red;width:5%;">ЗАКУПКА</th>
+							<th style="width:5%;">Цена</th>
+							{% if form.status.value == 1 %}
+							<th style="width:5%;"><img src={% static "img/shop_cart.png" %} width=32px></th>
+							{% endif %}
+						</tr>
+					</thead>
+
+					<tbody>
+						{% for price in parts_cross %}
+						<tr>
+							<td align="center">{{forloop.counter}}</td>
+							<td class="block_id" style="color:#397bd9;font-size:12px;font-weight:600;">{{price.stock}}</td>
+							<td style="color:#397bd9;font-size:12px;font-weight:600;">{{price.producer}}</td>
+							<td>{{price.p_product}}</td>
+							<td>{{price.description}}</td>
+							<td>{{price.qty}}</td>
+							<td>{{price.delivery_time}} </td>
+							<td class="block_id" style="color:red;font-weight:600;">{{price.purchase_price}} </td>
+							<td style="color:#397bd9;font-weight:600;" onmouseover="document.getElementById('date_price_cross_{{forloop.counter}}').style.display='block';" onmouseout="document.getElementById('date_price_cross_{{forloop.counter}}').style.display='none';">
+                         	{{price.our_price}}
+                            <span id="date_price_cross_{{forloop.counter}}" class="hovertip">Дата обновления</br>{{price.created_at}}</span>
+                        	</td>
+							{% if form.status.value == 1 %}
+							<td width="50px"><a href="/add_to_offer/{{price.p_product}}_{{price.id_stock}}_{{price.producer_pk}}_{{offer.pk}}/"><img src={% static "img/shop_cart.png" %} width=32px></a></td>
+							{% endif %}
+						</tr>
+						{% endfor %}
+
+					</tbody>
+
+			</table>
+		{% endif %}
+        </div>
+		<details open="open">
+		<summary><span style="color:#397bd9;font-weight:bold;">Запчасти Заявки</span></summary>
+        <div class="float-left">
+            <form name="offer_update" method="POST" action="/lk/offeritem_update/{{offer.pk}}/" >
+                {% csrf_token %}
+				<div class="float-right">
+				{% if form.status.value == 1 %}
+                <input style="margin-bottom:10px;background-color:#397bd9;border-color:#397bd9;border-radius:2px;color:#ffffff;" type="submit" value="Пересчитать"/>
+				{% endif%}
+                </div>
+				<table class="stack" width="100%">
+							<thead >
+								<tr>
+                                    <th>№</th>
+									<th class="block_id" style="width:10%;">Склад</th>
+									<th style="width:5%;">Бренд</th>
+									<th style="width:5%;">Номер запчасти</th>
+									<th style="width:45%;">Описание</th>
+									<th style="width:15%;">Кол-во</th>
+									<th style="width:5%;">Срок доставки</th>
+									<th class="block_id" style="color:red;width:5%;">ЗАКУПКА</th>
+									<th style="width:5%;">Цена</th>
+									<th style="width:5%;">Сумма</th>
+									{% if form.status.value == 1 %}
+									<th style="width:5%;"><img src={% static "img/del_cart.png" %} alt="" width=16px></th>
+									{% endif %}
+								</tr>
+							</thead>
+				{% if itemOffer %}
+
+						<tbody>
+							{% for item in itemOffer %}
+							<tr>
+								<td align="center">{{forloop.counter}}</td>
+								<td class="block_id" style="color:#397bd9;font-size:13px;font-weight:600;">{{item.stock}}</td>
+								<td style="color:#397bd9;font-weight:600;">{{item.brand}}</td>
+
+                                {% if item.status_offer == 0 %}
+								<td>{{item.product}}</td>
+                                {% elif item.status_offer == 1 %}
+								<td><a style="color:blue;" href="/lk/invoice/{{item.invoice.pk}}/">{{item.product}}</a></td>
+                                {% elif item.status_offer == 2 %}
+								<td><a style="color:green;" href="/lk/invoice/{{item.invoice.pk}}/">{{item.product}}</a></td>
+                                {% elif item.status_offer == 3 %}
+                                <td><a style="color:orange;" href="/lk/invoice/{{item.invoice.pk}}/">{{item.product}}</a></td>
+								{% elif item.status_offer == 4 %}
+                                <td><a style="color:red;" href="/lk/invoice/{{item.invoice.pk}}/">{{item.product}}</a></td>
+								{% endif %}
+									<input type="hidden" name="pk" value="{{item.pk}}">
+									<td>{{item.product.description}}</td>
+								<td>
+									<button class="minus">-</button>
+										<input class="offer_qty" type="text" name="qty" value="{{item.quantity}}">
+									<button class="plus">+</button>
+								</td>
+								<td >{{item.stock.delivery_time}} </td>
+								<td class="block_id" style="color:red;font-weight:600;">{{item.purchase_price}}</td>
+								{% if form.discount.value == 0 %}
+                                <td style="font-weight:600;">
+                                    <input style="min-width:80px;height:25px;margin-top:13px;"  type="text" name="unit_price" value="{{item.unit_price_discount|formatted_float}}"  pattern="[0-9.]+" title="Допускаются только цифры от 0 до 9 и знак ''.''">
+                                </td>
+                                {% else %}
+                                <td style="color:#397bd9;font-weight:600;">{{item.unit_price_discount}}</td>
+                                {% endif %}
+								<td style="color:#397bd9;font-weight:600;">{{item.total_price_offer}}</td>
+								{% if form.status.value == 1 %}
+								<td><a href="/del_offer_item/{{item.product}}_{{item.stock.pk}}_{{item.offer.pk}}_{{item.brand.pk}}/"><img src={% static "img/del_cart.png" %} alt="" width="16px"></a></td>
+								{% endif %}
+							</tr>
+							{% endfor %}
+                            <tr class="block_id">
+                       		  <td colspan="6" align="right">ИТОГО:</td>
+							  <td colspan="4" style="color:red;font-weight:600;">{{offer.price_offer_purhase}} </td>
+							</tr>
+							<tr>
+                       		  <td colspan="6" align="right">ИТОГО:</td>
+							  <td colspan="4" style="color:#397bd9;font-weight:600;">{{offer.price_offer}} </td>
+							</tr>
+                    </tbody>
+
+
+				{% endif %}
+				</table>
+            	</form>
+		</div>
+
+		</details>
+		</br>
+        <div class="row">
+            <div class="medium-12 columns">
+                <details>
+                <summary><span style="color:#397bd9;font-weight:bold;">Работы Заявки</span></summary>
+                    </br>
+                        <div class="medium-6 columns">
+                            <form name="search_works" method="POST" action="/lk/search_works/{{offer.pk}}/">
+                                {% csrf_token %}
+                                <div class="float-left">
+                                    <input style="min-width:250px;float:left;padding:0 5px;height:25px;font-size: 0.8rem;border-color: #000;" name="work" type="text" value="" placeholder="Введите номер работы из KSD" pattern="[0-9]+" title="Допускаются только цифры от 0 до 9"/>
+                                </div>
+                                <div class="float-left">
+                                    <input style="float:left;margin-bottom:10px;background-color:#397bd9;border-color:#397bd9;border-radius:2px;color:#ffffff;" type="submit" value="Добавить"/>
+                                </div>
+                            </form>
+                        </div>
+
+                        <form name="works_update" method="POST" action="/lk/offerworks_update/{{offer.pk}}/" >
+                            {% csrf_token %}
+                            <div class="float-left">
+                                <label for="id_aw">Цена AW:</label>
+                            </div>
+                            <div class="float-left">
+                                <input input style="width:50px;float:left;padding:0 5px;height:25px;font-size: 0.8rem;border-color: #000;" name="aw_price" type="text" value="{{offer.aw_price}}" placeholder="Стоимость AW"/>
+                            </div>
+                            <div class="float-right">
+                                <input style="float:left;margin-bottom:10px;background-color:#397bd9;border-color:#397bd9;border-radius:2px;color:#ffffff;" type="submit" value="Пересчитать"/>
+                            </div>
+                            {% if error_work %}
+                                <div class="medium-12 columns">
+                                    <h4><span style="color:red;">{{error_work}}</span></h4>
+                                </div>
+                            {% endif %}
+                        <table class="stack" width="100%">
+                                        <thead >
+                                            <tr>
+                                                <th style="width:5%;">№</th>
+                                                <th style="width:5%;">Номер</th>
+                                                <th style="width:60%;">Наименование</th>
+                                                <th style="width:7%;">AW</th>
+                                                <th style="width:18%;">Сумма</th>
+                                                {% if form.status.value == 1 %}
+                                                <th style="width:5%;"><img src={% static "img/del_cart.png" %} alt="" width=16px></th>
+                                                {% endif %}
+                                            </tr>
+                                        </thead>
+                            {% if workOffer %}
+
+                                    <tbody>
+                                        {% for item in workOffer %}
+                                        <tr>
+                                            <td align="center">{{forloop.counter}}</td>
+                                            <td style="font-weight:600;">{{item.work.number}}</td>
+                                            <input type="hidden" name="pk" value="{{item.pk}}">
+                                            <td>{{item.work.name}}</td>
+                                            <td>
+                                                <input input name="aw" type="text" value="{{item.aw}}"/>
+                                            </td>
+                                            {% if item.unit_price == 0 %}
+                                            <td style="color:red;font-weight:600;">{{item.unit_price}}</td>
+                                            {% else %}
+                                            <td style="color:#397bd9;font-weight:600;">{{item.unit_price}}</td>
+                                            {% endif %}
+                                            {% if form.status.value == 1 %}
+                                            <td><a href="/lk/del_work/{{item.pk}}/"><img src={% static "img/del_cart.png" %} alt="" width="16px"></a></td>
+                                            {% endif %}
+                                        </tr>
+                                        {% endfor %}
+                                        <tr>
+                                          <td colspan="4" align="right">ИТОГО:</td>
+                                          <td colspan="5" style="color:#397bd9;font-weight:600;">{{offer.price_works}}</td>
+                                        </tr>
+                                         <tr>
+                                          <td colspan="4" align="right" style="font-weight:700;">ИТОГО ЗАПЧАСТИ + РАБОТА:</td>
+                                          <td colspan="5" style="color:#397bd9;font-weight:700;">{{offer.price_all_offer}}</td>
+                                        </tr>
+                                    </tbody>
+
+
+                            {% endif %}
+                            </table>
+                        </form>
+                 </details>
+            </div>
+        </div>
+                </br>
+         <div class="row">
+            <div class="medium-12 columns">
+                <div class="float-left" style="margin-bottom:10px;padding:3px 7px;background-color:#397bd9;border-color:#397bd9;border-radius:6px;color:#ffffff;">
+                    <a style="color:#fff;" href="/lk/offer_print/{{offer.pk}}/1/">Печать накладную</a>
+                </div>
+                <div class="float-left" style="margin-left:10px;margin-bottom:10px;padding:3px 7px;background-color:#397bd9;border-color:#397bd9;border-radius:6px;color:#ffffff;">
+                    <a style="color:#fff;" href="/lk/offer_print/{{offer.pk}}/">Печать предложение</a>
+                </div>
+                <div class="float-left" style="margin-left:10px;margin-bottom:10px;padding:3px 7px;background-color:#397bd9;border-color:#397bd9;border-radius:6px;color:#ffffff;">
+                    <a style="color:#fff;" href="/lk/offer_print_labels/{{offer.pk}}/">Печать этикеток</a>
+                </div>
+            </div>
+         </div>
+</div>
+</div>
+</div>
+
+
+{% endblock content %}

@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% load static from staticfiles %}
+
+{% block title %}Подбор запчастей для автомобилей BMW и Mini | bmwminiparts.ru{% endblock %}
+{% block breadcrumbs %} {{ block.super }} <li><a href="/catalog_online/">Подбор запчастей для BMW и Mini</a></li>{% endblock %}
+{% block content %}
+
+    <link rel="stylesheet" href={% static "css/bootstrap.min.css" %} />
+    <link rel="stylesheet" href="http://static.ilcats.ru/css/custom.css">
+	<link rel="stylesheet" href="http://static.ilcats.ru/css/jquery.fancybox.css">
+
+
+
+
+<style type="text/css">.fancybox-margin{margin-right:0px;}</style>
+{% autoescape off %}{{ilcats}}{% endautoescape %}
+
+
+
+
+<script type="text/javascript" src="http://static.ilcats.ru/js/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="http://static.ilcats.ru/js/jquery-migrate-1.2.1.min.js"></script>
+<script type="text/javascript" src="http://static.ilcats.ru/js/bootstrap.min.js"></script>
+
+
+
+
+
+
+<script type="text/javascript">
+
+    jQuery(document).ready(function() {
+
+        var emptyElement_1 = $('#ms_1').is(':empty');
+        var emptyElement_4 = $('#ms_4').is(':empty');
+        var emptyElement_9 = $('#ms_9').is(':empty');
+
+        var emptyElement_3 = $('#ms_3').is(':empty');
+        var emptyElement_7 = $('#ms_7').is(':empty');
+        var emptyElement_11 = $('#ms_11').is(':empty');
+
+        var modif = 0;
+
+
+            if (emptyElement_1 == true
+                && emptyElement_4 == true
+                && emptyElement_9 == true) {
+
+                $('#ms_1').css("width", "0px");
+                $('#ms_4').css("width", "0px");
+                $('#ms_9').css("width", "0px");
+
+                modif = modif +1;
+            }else{
+            }
+
+            if (emptyElement_3 == true
+                && emptyElement_7 == true
+                && emptyElement_11 == true) {
+
+                $('#ms_3').css("width", "0px");
+                $('#ms_7').css("width", "0px");
+                $('#ms_11').css("width", "0px");
+
+                modif = modif +1;
+            }else{
+            }
+
+
+                if (modif==1) {
+                    $('#ms_2').css("width", "91%");
+                    $('#main_col').css("width", "91%");
+                    $('#ms_10').css("width", "91%");
+                } else if (modif==2) {
+                    $('#ms_2').css("width", "100%");
+                    $('#main_col').css("width", "100%");
+                    $('#ms_10').css("width", "100%");
+                } else {
+                }
+    });
+
+</script>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		$(".fancybox").fancybox({
+			openEffect	: 'none',
+			closeEffect	: 'none'
+		});
+	});
+</script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$(".various").fancybox({
+			maxWidth	: 1000,
+			maxHeight	: 600,
+			fitToView	: false,
+			width		: '70%',
+			height		: '70%',
+			autoSize	: false,
+			closeClick	: true,
+			openEffect	: 'none',
+			closeEffect	: 'none'
+		});
+	});
+</script>
+
+
+
+
+<script type="text/javascript">
+    jQuery(document).ready(function() {
+        App.init();
+    });
+</script>
+
+{% endblock content %}

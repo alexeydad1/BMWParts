@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% load static from staticfiles %}
+
+{% block title %}Моторные и трансмиссионные масла,технические жидкости для BMW и Mini в СПб| bmwminiparts.ru{% endblock %}
+{% block breadcrumbs %} {{ block.super }} <li><a href="/motor_oil_technical_liquids/">Моторные масла и технические жидкости для BMW и Mini</a></li>{% endblock %}
+{% block content %}
+<style>
+.product{
+	margin:10px 0;
+	width:100%;
+	border:1px solid #a9a9a9;
+	padding:5px;
+}
+
+.product:hover .img_product img {
+	transform: scale(1.10);
+
+}
+
+.img_product{
+	position: relative;
+	padding-bottom: 100%;
+	overflow: hidden;
+
+}
+
+.img_product img {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	max-width: 100%;
+	max-height: 100%;
+	margin: 5px;
+	transition: transform .4s ease-out;
+}
+
+.name_product{
+	position: relative;
+	margin: 5px;
+	font-size: 0.9em;
+	line-height: 1.4em;
+	height: 6em;
+	overflow: hidden;
+}
+
+.search_product{margin:20px 0;}
+
+.search_product a{
+	position:relative;
+	display:block;
+	margin:0 auto;
+	width:150px;
+}
+</style>
+	<div class="medium-12 columns">
+		<h1 style="font-size:1.5rem;">Моторные масла</h1>
+		{% for item in products_oil %}
+			<div class="medium-2 float-left columns">
+				<div class="product">
+					{% if item.image %}
+						<div class="img_product">
+							<img src="{{MEDIA_URL}}{{ item.image.url}}" />
+						</div>
+					{% else %}
+						<div class="img_product">
+							<img src="/media/img/products/720060_29012017.png" />
+						</div>
+					{% endif %}
+					<div class="name_product"><p>{{item.description}}</p></div>
+					<div class="search_product"><a class="button" href="/search?partnumber={{item.partnumber}}">Цены</a></div>
+				</div>
+			</div>
+		{% endfor %}
+	</div>
+	<div class="medium-12 columns">
+		<h1 style="font-size:1.5rem;">Технические жидкости</h1>
+		{% for item in products_tehnical %}
+			<div class="medium-2 float-left columns">
+				<div class="product">
+					{% if item.image %}
+						<div class="img_product">
+							<img src="{{MEDIA_URL}}{{ item.image.url}}" />
+						</div>
+					{% else %}
+						<div class="img_product">
+							<img src="/media/img/products/720060_29012017.png" />
+						</div>
+					{% endif %}
+					<div class="name_product"><p>{{item.description}}</p></div>
+					<div class="search_product"><a class="button" href="/search?partnumber={{item.partnumber}}">Цены</a></div>
+				</div>
+			</div>
+		{% endfor %}
+	</div>
+
+
+{% endblock content %}

@@ -1,0 +1,88 @@
+﻿{% extends "base.html" %}
+{% load static from staticfiles %}
+
+{% block title %}Оформление заказа | bmwminiparts.ru{% endblock %}
+{% block breadcrumbs %} {{ block.super }} <li><a href="/order/">Оформление заказа</a></li>{% endblock %}
+{% block content %}
+
+				<div class="medium-12 columns">
+					<h1 style="font-size:18px;">Оформление заказа</h1>
+				</div>
+				<div class="medium-4 columns">
+					<form action='/order/' method='POST' name='order'>
+						{% csrf_token %}
+						<label for="f_name">Имя:</label>
+						<input type="text" name="f_name" value="{{f_name}}">
+						{% if f_name_errors %}
+						<p class="form-error is-visible">{{f_name_errors}}</p>
+						{% endif %}
+						
+						<label for="l_name">Фамилия:</label>
+						<input type="text" name="l_name" value="{{l_name}}">
+						
+						<label for="address">Адрес доставки:</label>
+						<textarea rows="3" cols="45" name="address">{{address}}</textarea>
+						{% if address_errors %}
+						<p class="form-error is-visible">{{address_errors}}</p>
+						{% endif %}
+						
+						<label for="telephone">Телефон:</label>
+						<input id="telephone" type="text" name="telephone" pattern="+7([0-9]{3}) [0-9]{3}-[0-9]{2}-[0-9]{2}" placeholder="+7(___) ___-__-__" value="{{phone}}">
+						{% if phone_errors %}
+						<p class="form-error is-visible">{{phone_errors}}</p>
+						{% endif %}
+						
+						<label for="e_mail">E-mail:</label>
+						<input type="text" name="e_mail" value="{{e_mail}}">
+						{% if e_mail_errors %}
+						<p class="form-error is-visible">{{e_mail_errors}}</p>
+						{% endif %}
+						
+						<label for="commentorder">Комментарий к заказу:</label>
+						<textarea rows="3" cols="45" name="commentorder">{{commentorder}}</textarea>
+						<div class="float-right">
+							<input style="margin:5px;background-color:#397bd9;border-color:#397bd9;border-radius:6px;color:#ffffff;" type="submit" value="Заказать">
+						</div>
+				</div>
+				<div class="medium-8 columns">
+					<h4 style="font-size:18px;">Позиции заказа:</h4>
+					<table class="stack" width=100%>
+						<thead >
+							<tr style="text-align: center;">
+                                <th>№</th>
+								<th>Бренд</th>
+								<th>Номер</th>
+								<th>Описание</th>
+								<th>Цена</th>
+								<th>Количество</th>
+								<th>Сумма</th>
+							</tr>
+						</thead>
+					
+						{% for item in cart %}
+							<tr>
+                                <td align="center">{{forloop.counter}}</td>
+								<td style="color:#397bd9;font-weight:600;">{{item.product.producer}}</td>
+								<td>{{item.product}}</td>
+								<td>{{item.product.description}}</td>
+								<td>{{item.unit_price}}</td>
+								<td>{{item.quantity}}</td>
+								<td style="color:#397bd9;font-weight:600;">{{item.total_price}}</td>
+							</tr>
+						{% endfor %}
+					</table>
+						<div class="float-right"><p style="font-weight:bold;">Итого: {{cartTotal}} руб.</p></div>	
+									
+
+					</form>
+				</div>
+
+			
+			
+					
+		
+				
+				
+
+
+{% endblock content %}

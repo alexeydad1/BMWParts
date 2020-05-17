@@ -1,0 +1,43 @@
+﻿{% extends "base.html" %}
+{% load static from staticfiles %}
+
+{% block title %}Черновики | bmwminiparts.ru{% endblock %}
+{% block breadcrumbs %} {{ block.super }} <li><a href="/lk/draft/">Черновики</a></li>{% endblock %}
+{% block content %}
+{% include "lk/lk_menu.html" %}
+<div class="medium-12 columns">
+	<div  class="lk_col">
+		<div class="medium-12 columns">
+			<table class="stack" width="100%">
+				<thead >
+					<tr>
+                        <th>№</th>
+						<th>Название</th>
+						<th>Дата</th>
+						<th>Сумма</th>
+						<th></th>
+					</tr>
+				</thead>
+				{% if draft%}
+					<tbody>
+						{% for item in draft %}
+						<tr>
+                            <td align="center">{{forloop.counter}}</td>
+							<td><a href="/lk/draft_detail/{{item.pk}}/">{{item.name}}</td>
+							<td>{{item.creation_date}}</td>
+							<td>{{item.price_d}}</td>
+							<td><a href="/del_draft/{{item.pk}}/"><img src={% static "img/del_cart.png" %} alt="" width="16px"></a></td>
+						</tr>
+					</tbody>
+					{% endfor %}
+				
+		{% else %}
+			<div class="small-6 medium-12 columns">
+				<p class="text-center"><font color="#ff0000">{{ error_request}}</font></p>
+			</div>
+		{% endif %}
+		</table>
+		</div>
+		</div>
+		</div>
+{% endblock content %}

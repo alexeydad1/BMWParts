@@ -1,0 +1,181 @@
+{% load static from staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Печать заявки</title>
+</head>
+<style>
+    table {
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid black;
+    padding:0 4px;
+}
+p{
+    margin:0;
+    padding:2px;
+}
+
+h4{
+    margin:0;
+    padding:5px;
+}
+span{
+    font-size:11pt;
+    font-weight:300;
+}
+</style>
+<body>
+<div style="width:100%;">
+      <div style="width:60%;float:left;">
+        <img src='{% static "img/logo.png" %}' alt="bmwminiparts.ru" height="70px">
+      </div>
+      <div style="width:40%;float:left;text-align:left;">
+        <table width="100%" style="border:none;">
+            <tr>
+                <td style="border:none;padding:0 2px;">Site:</td>
+                <td style="border:none;padding:0 2px;">http://www.bmwminiparts.ru</td>
+            </tr>
+            <tr>
+                <td style="border:none;padding:0 2px;">VK:</td>
+                <td style="border:none;padding:0 2px;">http://vk.com/bmwminiparts</td>
+            </tr>
+            <tr>
+                <td style="border:none;padding:0 2px;">E-mail:</td>
+                <td style="border:none;padding:0 2px;">zakaz@bmwminiparts.ru</td>
+            </tr>
+            <tr>
+                <td style="border:none;padding:0 2px;">Phone:</td>
+                <td style="border:none;padding:0 2px;">+7911-121-62-53</td>
+            </tr>
+
+         </table>
+
+      </div>
+</div>
+<br>
+<br>
+<br>
+<br>
+<div style="padding-top:50px;">
+    {% if offer_p == "1" %}
+    <h4 align="center">Накладная № {{offer.pk}} от {% now "d N Y" %}</h4>
+    <h4 align="left">Отправитель:<span> ООО "Интэл", адрес: г.СПб.,ул.Тележная 17-19Г, тел.:+7911-121-62-53</span></h4>
+    <h4 align="left">Получатель:<span> {{offer.customer.fio}}, {{offer.phone}}, {{offer.vin}}, {{offer.comment}}</span></h4>
+    <h4 align="left">Основание для отпуска:<span> Заявка №{{offer.pk}}</span></h4>
+    {% else %}
+    <h4 align="center">Коммерческое предложение № {{offer.pk}} от {% now "d N Y" %}</h4>
+    {% endif %}
+</div>
+{% if offeritem %}
+<div style="padding-top:10px;">
+    <h4>Запчасти:</h4>
+    <table width="100%" style="border:1px solid;">
+        <thead>
+            <tr>
+                <th>№</th>
+                <th>Бренд</th>
+                {% if offer_p == "1" %}
+                <th>Номер запчасти</th>
+                {% endif %}
+                <th>Наименование товарно-материальных ценностей</th>
+                <th>Срок поставки</th>
+                <th>Ед. изм.</th>
+                <th>Кол-во</th>
+                <th>Цена,руб. коп.</th>
+                <th>Сумма,руб. коп.</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for item in offeritem %}
+            <tr>
+                <td align="center">{{forloop.counter}}</td>
+                <td align="center">{{item.product.producer}}</td>
+                {% if offer_p == "1" %}
+                <td>{{item.product}}</td>
+                {% endif %}
+                <td>{{item.product.description}}</td>
+                <td align="center">{{item.stock.delivery_time}}</td>
+                <td align="center">шт.</td>
+                <td align="center" style="font-weight:bold;">{{item.quantity}}</td>
+                <td align="center" style="font-weight:bold;">{{item.unit_price_discount}}</td>
+                <td align="center" style="font-weight:bold;">{{item.total_price_offer}}</td>
+            </tr>
+        {% endfor %}
+            <tr>
+                 {% if offer_p == "1" %}
+                  <td colspan="8" align="right" style="font-weight:bold;">ИТОГО:</td>
+                 {% else %}
+                  <td colspan="7" align="right" style="font-weight:bold;">ИТОГО:</td>
+                 {% endif %}
+                 <td align="center" style="font-weight:bold;">{{offer.price_offer}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% endif %}
+{% if workoffer %}
+<div style="padding-top:10px;">
+    <h4>Работы:</h4>
+    <table width="100%" style="border:1px solid;">
+        <thead>
+            <tr>
+                <th>№</th>
+                {% if offer_p == "1" %}
+                <th>Номер работы</th>
+                {% endif %}
+                <th>Наименование работы</th>
+                <th>AW</th>
+                <th>Сумма,руб. коп.</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for item in workoffer %}
+            <tr>
+                <td align="center">{{forloop.counter}}</td>
+                {% if offer_p == "1" %}
+                <td>{{item.work.number}}</td>
+                {% endif %}
+                <td>{{item.work.name}}</td>
+                <td align="center" style="font-weight:bold;">{{item.aw}}</td>
+                <td align="center" style="font-weight:bold;">{{item.unit_price}}</td>
+            </tr>
+        {% endfor %}
+            <tr>
+                 {% if offer_p == "1" %}
+                  <td colspan="4" align="right" style="font-weight:bold;">ИТОГО:</td>
+                 {% else %}
+                  <td colspan="3" align="right" style="font-weight:bold;">ИТОГО:</td>
+                 {% endif %}
+                 <td align="center" style="font-weight:bold;">{{offer.price_works}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% endif %}
+</br>
+{% if workoffer %}
+<div style="float:right;font-weight:bold;">ИТОГО ЗАПЧАСТИ + РАБОТА: {{offer.price_all_offer}}</div>
+{% else %}
+<div style="float:right;font-weight:bold;">ИТОГО : {{offer.price_offer}}</div>
+{% endif %}
+</br>
+</br>
+{% if offer_p == "1" %}
+<div style="width:100%;">
+    <div style="width:50%;float:left;">
+        Отпустил ________________________________
+    </div>
+    <div style="width:50%;float:left;">
+        Получил  ________________________________
+    </div>
+</div>
+{% else %}
+<p>Данное коммерческое предложение действительно в течение 2 дней со дня
+его предоставления.</p>
+{% endif %}
+</body>
+</html>

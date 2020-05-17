@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+{% load static from staticfiles %}
+
+{% block title %}Импорт прайсов| bmwminiparts.ru{% endblock %}
+{% block breadcrumbs %}{{ block.super }} <li><a href="/import_price/">Импорт прайсов</a></li>{% endblock %}
+{% block content %}
+{% include "lk/lk_menu.html" %}
+<div class="medium-12 columns">
+	<div  class="lk_col">
+	    	<div class="small-6 medium-6 columns">
+				<p><span style="color:red;">ВНИМАНИЕ!!!!</span><br>	Файл должен содержать следующие колонки в таком порядке!!! <br>| НОМЕР | КОЛИЧЕСТВО | ЗАКУПОЧНАЯ ЦЕНА | ПРОДАЖНАЯ ЦЕНА |</p>
+				<form action="/lk/import_price/" method="POST" enctype="multipart/form-data">
+				{% csrf_token %}
+				{{ form }}
+				<input type="submit" value="Импорт CSV">
+				</form>
+			</div>
+			<div class="small-6 medium-6 columns">
+				{% if link %}
+					<h5>файлы для скачивания</h5>
+					<div><a href="{{link}}">{{link}}</a></div>
+				{% endif %}
+				<form action="/lk/make_csv/" method="POST" enctype="multipart/form-data">
+				{% csrf_token %}
+					{{ form_csv.non_field_errors }}
+				<div class="row">
+						<div class="medium-12 columns">
+								{{ form_csv.file.errors }}
+								<label for="id_file">Файл для загрузки:</label>
+								{{ form_csv.file }}
+						</div>
+						<div class="medium-6 columns">
+
+							<div>
+								{{ form_csv.number.errors  }}
+								<label for="id_number">№ колонки с номером запчасти</label>
+								{{ form_csv.number }}
+							</div>
+							<div>
+								{{ form_csv.qty.errors  }}
+								<label for="id_qty">№ колонки с количеством</label>
+								{{ form_csv.qty }}
+							</div>
+							<div>
+								{{ form_csv.price.errors  }}
+								<label for="id_price">№ колонки с ценой закупки</label>
+								{{ form_csv.price }}
+							</div>
+						</div>
+						<div class="medium-6 columns">
+                            <div>
+								{{ form_csv.price_dealer.errors  }}
+								<label for="id_price_dealer">№ колонки с ценой розница Дилера</label>
+								{{ form_csv.price_dealer }}
+							</div>
+							<div>
+								{{ form_csv.margin.errors  }}
+								<label for="id_margin">Наценка в процентах</label>
+								{{ form_csv.margin }}
+							</div>
+							<div>
+								{{ form_csv.round_price.errors  }}
+								<label for="id_round_price">Кратность округления например:"5"</label>
+								{{ form_csv.round_price }}
+							</div>
+						</div>
+				</div>
+				 <input type="submit" value="Создать CSV">
+				</form>
+			</div>
+
+		<div class="medium-12 columns">
+				<table class="hover" width=100%>
+					<thead >
+					<tr style="text-align: center;">
+                        <th>№</th>
+						<th>Название файла</th>
+						<th>Склад</th>
+						<th>Дата</th>
+
+					</tr>
+					</thead>
+					{% for f in file_price %}
+					<tr>
+                        <td align="center">{{forloop.counter}}</td>
+						<td>{{f.import_filenames}}</td>
+						<td>{{f.stock}}</td>
+						<td>{{f.created_at}}</td>
+					</tr>
+					{% endfor %}
+				</table>
+		</div>
+
+		{% if not_product %}
+		<div class="small-12 medium-10 columns">
+			<p>Не найдено {{ not_product|length }} позици{{ not_product|pluralize:"я,и" }}</p>
+			<table class="hover" width=100%>
+					<thead >
+					<tr style="text-align: center;">
+						<th>Номер детали</th>
+						<th>Количество</th>
+						<th>Закупочная цена</th>
+						<th>Розничная цена НАША!!!</th>
+					</tr>
+					</thead>
+					{% for not_product1 in not_product %}
+					<tr>
+					{% for not_product2 in not_product1 %}
+						<td>{{not_product2}}</td>
+					{% endfor %}
+					</tr>
+					{% endfor %}
+				</table>
+		</div>
+		{% endif %}	
+		{% if price%}
+			<div class="small-12 medium-10 columns">
+			<p>Загружено {{ price|length }} позици{{ parts|pluralize:"я,и" }}</p>
+			<table class="hover" width=100%>
+					<thead >
+					<tr style="text-align: center;">
+						<th>Номер детали</th>
+						<th>Количество</th>
+						<th>Закупочная цена</th>
+						<th>Розничная цена НАША!!!</th>
+					</tr>
+					</thead>
+					{% for price1 in price %}
+					<tr>
+					{% for price2 in price1 %}
+						<td>{{price2}}</td>
+					{% endfor %}
+					</tr>
+					{% endfor %}
+				</table>
+			</div>
+
+		{% endif %}
+
+	</div>
+</div>
+
+{% endblock content %}

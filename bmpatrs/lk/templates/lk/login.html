@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Вход в личный кабинет | bmwminiparts.ru{% endblock %}
+{% block description %}Вход в личный кабинет пользователя на сайте bmwminiparts.ru{% endblock %}
+{% block keywords %}Личный кабинет, история платежей, баланс{% endblock %}
+{% block breadcrumbs %} {{ block.super }} <li><a href="/lk/login/">Вход в личный кабинет</a></li>{% endblock %}
+{% block content %}
+<div class="float-center">
+<div class=" float-center medium-4 columns">
+<h4>Войти в личный кабинет</h4>
+	
+  <form action='/lk/login/' method='post'>
+	{% csrf_token %}
+    <label for="username">Логин:</label>
+    <input type="text" name="username" value="" id="username">
+    <label for="password">Пароль:</label>
+    <input type="password" name="password" value="" id="password">
+	{% if login_errors %}
+		<p class="form-error is-visible">{{login_errors}}</p>
+	{% endif %}
+    <input class="button" type="submit" value="Войти" />
+    <a style="color:#ff0000;padding-bottom:10px;" href="/lk/singup/?next=/lk/login/">Регистрация</a>
+
+  </form>
+</div>
+</div>
+{% endblock content %}

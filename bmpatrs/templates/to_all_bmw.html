@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% load static from staticfiles %}
+{% block description %}Для вашего удобства мы подобрали комплекты для технического обслуживания всех моделей BMW и MINI. Выбрав свою модель автомобиля, кузов и двигатель вы получите список применяемых запчастей для ТО.{% endblock %}
+{% block keywords %}запчасти для ТО BMW, запчасти для ТО БМВ,запчасти для ТО МИНИ, запчасти для ТО MINI, запчасти для технического обслуживания BMW{% endblock %}
+{% block title %}Комплекты для Технического обслуживания автомобилей BMW и Mini | bmwminiparts.ru{% endblock %}
+{% block breadcrumbs %} {{ block.super }} <li><a href="/to_all_bmw/">Комплекты ТО для BMW и Mini</a></li>{% endblock %}
+{% block content %}
+
+<div class="medium-4 columns">
+	<a href="/to_model_1_series/">
+		<img src="{% static "img/models/BMW-1-Series 5-door_Modelcard.png" %}">
+		<p style="text-align:center;">BMW 1 серии</p>
+	</a>
+</div>
+<div class="medium-4 columns">
+	<a href="/to_model_2_series/">
+		<img src="{% static "img/models/BMW-2-Series-Coupé_ModelCard.png" %}">
+		<p style="text-align:center;">BMW 2 серии</p>
+	</a>
+</div>
+<div class="medium-4 columns">
+	<a href="/to_model_3_series/">
+		<img src="{% static "img/models/BMW-3-series-Sedan.png" %}">
+		<p style="text-align:center;">BMW 3 серии</p>
+	</a>
+</div>
+<div class="medium-4 columns">
+	<a href="/to_model_4_series/">
+		<img src="{% static "img/models/BMW-4-Series-Coupé_ModelCard.png" %}">
+		<p style="text-align:center;">BMW 4 серии</p>
+	</a>
+</div>
+<div class="medium-4 columns">
+	<a href="/to_model_5_series/">
+		<img src="{% static "img/models/BMW-5-Series-Sedan.png.png" %}">
+		<p style="text-align:center;">BMW 5 серии</p>
+	</a>
+</div>
+<div class="medium-4 columns">
+	<a href="/to_model_6_series/">
+		<img src="{% static "img/models/BMW-6-Series-Coupe_ModelCard.png" %}">
+		<p style="text-align:center;">BMW 6 серии</p>
+	</a>
+</div>
+<div class="medium-4 columns">
+	<a href="/to_model_7_series/">
+		<img src="{% static "img/models/BMW-7-Series-Sedan_ModelCard.png" %}">
+		<p style="text-align:center;">BMW 7 серии</p>
+	</a>
+</div>
+<div class="medium-4 columns">
+	<a href="/to_model_i8_series/">
+		<img src="{% static "img/models/BMW-i8_ModelCard.png" %}">
+		<p style="text-align:center;">BMW i8 серии</p>
+	</a>
+</div>
+<div class="medium-4 columns">
+	<a href="/to_model_X1_series/">
+		<img src="{% static "img/models/BMW-X1_ModelCard.png" %}">
+		<p style="text-align:center;">BMW X1 серии</p>
+	</a>
+</div>
+<div class="medium-4 columns">
+	<a href="/to_model_X3_series/">
+		<img src="{% static "img/models/BMW-X3_ModelCard.png" %}">
+		<p style="text-align:center;">BMW X3 серии</p>
+	</a>
+</div>
+<div class="medium-4 columns">
+	<a href="/to_model_X4_series/">
+		<img src="{% static "img/models/BMW-X4_ModelCard.png" %}">
+		<p style="text-align:center;">BMW X4 серии</p>
+	</a>
+</div>
+<div class="medium-4 columns">
+	<a href="/to_model_X5_series/">
+		<img src="{% static "img/models/BMW-X5.png" %}">
+		<p style="text-align:center;">BMW X5 серии</p>
+	</a>
+</div>
+<div class="medium-4 float-left columns">
+	<a href="/to_model_X6_series/">
+		<img src="{% static "img/models/BMW-X6_ModelCard.png" %}">
+		<p style="text-align:center;">BMW X6 серии</p>
+	</a>
+</div>
+
+{% endblock content %}

@@ -1,0 +1,101 @@
+﻿{% extends "base.html" %}
+{% load static from staticfiles %}
+
+{% block title %}Черновик | bmwminiparts.ru{% endblock %}
+{% block breadcrumbs %} {{ block.super }} <li><a href="/draft/">Черновики</a></li>{% endblock %}
+{% block content %}
+<style>
+
+
+		.cart_qty{
+			display:inline-block;
+			margin-top:13px;
+			height:24px;
+			text-align:center;
+			width:40px;
+		}
+		span {cursor:pointer; }
+
+		.minus, .plus{
+			display:inline-block;
+			margin-top:12px;
+			font-size:14px;
+			font-weight:600;
+			width:25px;
+			background:#f2f2f2;
+			border-radius:4px;
+			padding:6px 4px 6px 4px;
+			border:1px solid #ddd;
+			text-align:center;
+		}
+
+
+
+
+</style>
+{% include "lk/lk_menu.html" %}
+	<div class="medium-12 columns">
+	<div  class="lk_col">
+		<div class="medium-12 columns">
+			<h1 style="font-size:18px;">Черновик - <span style="color:#397bd9;">{{draftName}}</span></h1>
+			<table class="stack" width="100%">
+					<thead >
+					<tr>
+						<th>№</th>
+						<th>Бренд</th>
+						<th>Номер запчасти</th>
+						<th>Описание</th>
+						<th>Цена</th>
+						<th>Количество</th>
+						<th>Сумма</th>
+						<th width=50px></th>
+					</tr>
+					</thead>
+			{% if draft%}
+				<tbody>
+					<form action='/lk/update_draft/{{draftName.pk}}/' method='POST' name='updatecart'>{% csrf_token %}
+					
+					{% for item in draft %}
+					<tr>
+                        <td align="center">{{forloop.counter}}</td>
+						<td style="text-align:left;">{{item.product.producer}}</td>
+						<td>
+							{{item.product}}
+							<input type="hidden" name="id_product" value="{{item.product}}">
+							<input type="hidden" name="stk" value="{{item.stock.pk}}">
+							<input type="hidden" name="prd" value="{{item.brand.pk}}">
+						</td>
+						<td>{{item.product.description}}</td>
+						<td>{{item.unit_price}}</td>
+						<td style="min-width:120px;">
+									<button class="minus">-</button>
+									<input class="cart_qty" type="text" name="qty" value="{{item.quantity}}">
+									<button class="plus">+</button>
+						</td>
+						<td>{{item.total_price_d}}</td>
+						<td><a href="/del_draft_item/{{item.product}}_{{item.stock.pk}}_{{item.draft.pk}}_{{item.brand.pk}}/"><img src={% static "img/del_cart.png" %} alt="" width="16px"></a></td>
+					</tr>
+				</tbody>
+					{% endfor %}
+			
+		{% else %}
+			<div class="small-6 medium-12 columns">
+				<p class="text-center"><font color="#ff0000">{{ error_request}}</font></p>
+			</div>
+		{% endif %}
+		</table>
+		<div class="float-right"><p style="font-weight:bold;">Итого: {{draftName.price_d}} руб.</p>
+
+			<input style="margin:5px 0px;background-color:#397bd9;border-color:#397bd9;border-radius:6px;color:#ffffff;" type="submit" value="Пересчитать заказ">
+			</form>
+			
+			<form action="/order_draft/{{draftName.pk}}/">
+				<input style="background-color:#397bd9;border-color:#397bd9;border-radius:6px;color:#ffffff;" type="submit" value="Оформить заказ"></button>
+			</form>
+			
+		</div>
+		</div>
+
+		</div>
+		</div>
+{% endblock content %}

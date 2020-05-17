@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% load floattags %}
+{% load static from staticfiles %}
+
+{% block title %}Заявки | bmwminiparts.ru{% endblock %}
+{% block breadcrumbs %} {{ block.super }} <li><a href="/lk/">личный кабинет</a></li><li><a href="/lk/offers/">Накладная</a></li>{% endblock %}
+{% block content %}
+{% include "lk/lk_menu.html" %}
+<style>
+.list{
+	  display: inline-block;
+	  height:50px;
+	  width:100px;
+	  overflow: hidden;
+	  overflow-y: scroll;
+	  margin:0;
+	  padding:0;
+	  list-style:none;
+	  border:1px solid #ccc;
+}
+.list a{
+	  display: block;
+	  padding:3px 5px;
+}
+</style>
+<div class="medium-12 columns">
+	<div  class="lk_col">
+		<div class="medium-12 columns">
+			<h1 style="font-size:18px;">Накладная № {{invoice.number_invoice}}</h1>
+			<h5 style="font-size:18px;">Поставщик: {{invoice.supplier}}</h5>
+			<h5 style="font-size:18px;">Склад: {{invoice.stock_sup}}</h5>
+			<h5 style="font-size:18px;">Срок поставки: {{invoice.stock_sup.delivery_time}}</h5>
+
+			{% if invoice.status == 0 %}
+				<h5 style="font-size:18px;">Статус: <span style="color:#F2C10D;">Новый</span></h5>
+			{% elif invoice.status == 1 %}
+				<h5 style="font-size:18px;">Статус: <span style="color:#3589FD;">Заказан</span></h5>
+			{% elif invoice.status == 2 %}
+				<h5 style="font-size:18px;">Статус: <span style="color:#000;">Принят</span></h5>
+			{% endif %}
+
+			<div class="float-left">
+				<form name="invoice_update" method="POST" action="/lk/invoice_update/{{invoice.pk}}/" >
+					{% csrf_token %}
+					<div class="medium-6 columns">
+					<h8>Позиции накладной:</h8>
+					</div>
+					<div class="float-right"><input style="margin-bottom:10px;background-color:#397bd9;border-color:#397bd9;border-radius:2px;color:#ffffff;" type="submit" value="Пересчитать"/></div>
+					<table class="stack" width="100%">
+								<thead >
+									<tr>
+										<th>№</th>
+										<th style="width:5%;">Бренд</th>
+										<th style="width:5%;">Номер запчасти</th>
+										<th style="width:5%;">Заявки/Заказы</th>
+										<th style="width:45%;">Описание</th>
+										<th style="width:15%;">Кол-во</th>
+										<th style="width:10%;">Кол-во Прихода</th>
+										<th style="width:10%;">Цена</th>
+										<th style="width:5%;">Сумма</th>
+										<th style="width:5%;">-</th>
+									</tr>
+								</thead>
+					{% if itemInvoice%}
+							<tbody>
+								{% for item in itemInvoice %}
+								<tr>
+									<td align="center">{{forloop.counter}}</td>
+									<td style="color:#397bd9;font-weight:600;">{{item.brand}}</td>
+									<td>{{item.product}}</td>
+										<input type="hidden" name="pk" value="{{item.pk}}">
+										<input type="hidden" name="stk" value="{{item.stock.pk}}">
+										<input type="hidden" name="prd" value="{{item.brand.pk}}">
+									<td>
+										<ul class="list">
+											{% for offer in item.get_offers %}
+												<li class="list__item"><a href="/lk/offer_detail/{{offer}}/">{{offer}}</a></li>
+											{% endfor %}
+											{% for order in item.get_orders %}
+												<li class="list__item"><a href="/lk/order_detail/{{order}}/"><span style="color:red;">{{order}}</span></a></li>
+											{% endfor %}
+										</ul>
+									</td>
+									<td>{{item.product.description}}</td>
+									<td>{{item.quantity}}</td>
+									<td>
+											<input class="offer_qty" type="text" name="qty_in" value="{{item.quantity_in}}" pattern="[0-9]+" title="Допускаются только цифры от 0 до 9">
+									</td>
+									<td style="color:#397bd9;font-weight:600;">
+										<input class="offer_qty" type="text" name="price_in" value="{{item.purchase_price|formatted_float}}" pattern="[0-9.]+" title="Допускаются только цифры от 0 до 9 и знак ''.''">
+									</td>
+									<td style="color:#397bd9;font-weight:600;">{{item.total_price_item}} </td>
+									<td><img src={% static "img/del_cart.png" %} alt="" width="16px"></td>
+								</tr>
+								{% endfor %}
+								<tr>
+								  <td colspan="6" align="right">ИТОГО:</td>
+								  <td colspan="4" style="color:#397bd9;font-weight:600;">{{invoice.total_invoice}}</td>
+								</tr>
+							</tbody>
+					{% endif %}
+					</table>
+				</form>
+				{% if invoice.status == 0 %}
+				<form name="invoice_order" method="POST" action="/lk/invoice_order/{{invoice.pk}}/" >
+				{% csrf_token %}
+					<div class="float-right"><input style="margin-bottom:10px;background-color:#397bd9;border-color:#397bd9;border-radius:2px;color:#ffffff;" type="submit" value="Заказать"/></div>
+				</form>
+				{% elif invoice.status == 1 %}
+				 <form name="invoice_accept" method="POST" action="/lk/invoice_accept/{{invoice.pk}}/" >
+				{% csrf_token %}
+					<div class="float-right"><input style="margin-bottom:10px;background-color:#397bd9;border-color:#397bd9;border-radius:2px;color:#ffffff;" type="submit" value="Принять"/></div>
+				</form>
+				{% endif %}
+			</div>
+			</div>
+</div>
+</div>
+
+{% endblock content %}

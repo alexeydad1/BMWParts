@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}Личный кабинет | bmwminiparts.ru{% endblock %}
+{% block breadcrumbs %} {{ block.super }}<li><a href="/lk/">личный кабинет</a></li>{% endblock %}
+{% block content %}
+{% include "lk/lk_menu.html" %}
+
+<div class="medium-12 columns">
+	<div  class="lk_col">
+		<div class="medium-6 columns">
+			<table class="stack">
+				<thead>
+				<tr>
+					<th style="color:#397bd9;font-size:14px;" colspan="2">Финансы</th>
+				</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>Баланс:</td>
+						{% if customer.balance > 0 %}
+						<td><span style="color:#397bd9;">{{user.accounts.balance}} р.</span></td>
+						{% else %}
+						<td><span style="color:red;">{{user.accounts.balance}} р.</span></td>
+						{% endif %}
+
+					</tr>
+					<tr>
+						<td>Ваша скидка:</td>
+						<td>{{user.accounts.discount}} %</td>
+					</tr>
+				</tbody>
+			</table>
+            <table class="stack" width="100%">
+				<thead >
+				<tr>
+					<th style="color:#397bd9;font-size:14px;" colspan="4">История баланса</th>
+				</tr>
+				<tr>
+					<th>№</th>
+					<th>Дата</th>
+					<th>Сумма</th>
+					<th>Вид операции</th>
+				</tr>
+				</thead>
+				 <tbody>
+				 {% for item in balance_history %}
+					<tr>
+						<td align="center">{{forloop.counter}}</td>
+						<td>{{item.created_at}}</td>
+						<td>{{item.balance_price}}</td>
+						<td>{{item.operations}}</td>
+					</tr>
+				{% endfor %}
+				 </tbody>
+			 </table>
+		</div>
+
+		<div class="medium-6 columns">
+			<table class="stack">
+				<thead>
+				<tr>
+					<th style="color:#397bd9;font-size:14px;" colspan="2">Личная информация</th>
+				</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>Логин:</td>
+						<td>{{user.username}}</td>
+					</tr>
+					<tr>
+						<td>Имя:</td>
+						<td>{{user.first_name}}</td>
+					</tr>
+					<tr>
+						<td>Фамилия:</td>
+						<td>{{user.last_name}}</td>
+					</tr>
+					<tr>
+						<td>Отчество:</td>
+						<td>{{user.accounts.fathername}}</td>
+					</tr>
+					<tr>
+						<td>Телефон:</td>
+						<td>{{user.accounts.telephone}}</td>
+					</tr>
+					<tr>
+						<td>E-mail:</td>
+						<td>{{user.email}}</td>
+					</tr>
+					<tr>
+						<td>Дата регистрации:</td>
+						<td>{{user.date_joined}}</td>
+					</tr>
+					<tr>
+						<td>Последний вход:</td>
+						<td>{{user.last_login}}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+{% endblock content %}

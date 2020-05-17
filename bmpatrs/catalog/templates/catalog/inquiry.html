@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load static from staticfiles %}
+
+{% block title %}Запрос отправлен - {{ p }} | bmwminiparts.ru{% endblock %}
+{% block breadcrumbs %}{{ block.super }} <li><a href="/inquiry/">Поиск запчастей</a></li>{% endblock %}
+{% block content %}
+<div class="medium-12 columns">
+	<h3 style="color:#397bd9;">Спасибо за ваш запрос!</h3>
+	<h5>Мы свяжемся с вами в ближайшее время!</h5>
+	<div><h5>Детали вашего запроса:</h5></div>
+	<div>Запчасть - <span style="font-weight:600">{{part.partnumber}} - {{part.description}}</span></div>
+	<div>Имя - <span style="font-weight:600">{{name}}</span></div>
+	<div>Телефон - <span style="font-weight:600">{{telephone}}</span></div>
+	<div>Комментарий - <span style="font-weight:600">{{comment}}</span></div>
+</div>
+
+{% endblock content %}

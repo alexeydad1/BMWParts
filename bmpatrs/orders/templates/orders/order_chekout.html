@@ -1,0 +1,56 @@
+﻿{% extends "base.html" %}
+{% load static from staticfiles %}
+
+{% block title %}Спасибо за заказ | bmwminiparts.ru{% endblock %}
+{% block breadcrumbs %} {{ block.super }} <li><a href="/order_finish/">Спасибо за заказ</a></li>{% endblock %}
+{% block content %}
+
+				<div class="medium-12 columns">
+
+						<h3 style="color:#397bd9;">Спасибо за ваш заказ!</h3>
+						<h5>Мы свяжемся с вами в ближайшее время по телефону {{phone}}</h5>
+						<div>Номер вашего заказа: <span style="font-weight:600">{{order.number_order}}</span></div>
+						<div>Ожидаемая дата доставки:  <span style="font-weight:600">{{delivery}}</span></div>
+						<div>Адрес доставки:  <span style="font-weight:600">{{address}}</span></div>
+						<div>Получатель:  <span style="font-weight:600">{{name}}</span></div>
+
+
+					<h5>Позиции заказа:</h5>
+					<table class="stack" width=100%>
+						<thead >
+							<tr style="text-align: center;">
+                                <th>№</th>
+								<th>Бренд</th>
+								<th>Номер</th>
+								<th>Описание</th>
+								<th>Цена</th>
+								<th>Количество</th>
+								<th>Сумма</th>
+							</tr>
+						</thead>
+					
+						{% for item in order_position %}
+							<tr>
+								<td align="center">{{forloop.counter}}</td>
+								<td style="color:#397bd9;font-weight:600;">{{item.product.producer}}</td>
+								<td>{{item.product}}</td>
+								<td>{{item.product.description}}</td>
+								<td>{{item.price_sale}}</td>
+								<td>{{item.count}}</td>
+								<td style="color:#397bd9;font-weight:600;">{{item.price}}</td>
+							</tr>
+						{% endfor %}
+					</table>
+						<div class="float-right"><p style="font-weight:bold;">Итого: {{order.price}} руб.</p></div>
+					</form>
+				</div>
+
+			
+			
+					
+		
+				
+				
+
+
+{% endblock content %}

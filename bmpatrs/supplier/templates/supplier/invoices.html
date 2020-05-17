@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% load static from staticfiles %}
+
+{% block title %}Накладные | bmwminiparts.ru{% endblock %}
+{% block breadcrumbs %} {{ block.super }} <li><a href="/lk/">личный кабинет</a></li><li><a href="/lk/offers/">Накладные</a></li>{% endblock %}
+{% block content %}
+{% include "lk/lk_menu.html" %}
+<div class="medium-12 columns">
+	<div  class="lk_col">
+		<div class="medium-12 columns">
+		<div style="padding:10px 0px;">
+		<a style="margin-bottom:10px;padding:5px 10px;background-color:#397bd9;border-color:#397bd9;border-radius:6px;color:#ffffff;" href="/lk/make_invoices/">Сформировать накладные</a>
+		</div>
+		<table class="stack" width="100%">
+					<thead >
+					<tr style="text-align: center;">
+                        <th>№</th>
+						<th width="20px"><input type="checkbox" name="allCheck" value="all"></th>
+						<th width=80px>№ Накладной</th>
+                      	<th width=50px>Дата</th>
+						<th>Статус</th>
+						<th>Поставщик</th>
+                      	<th>Склад</th>
+                      	<th>Сумма</th>
+
+					</tr>
+					</thead>
+			{% if invoices%}
+					<tbody>
+						{% for item in invoices %}
+						<tr>
+                            <td align="center">{{forloop.counter}}</td>
+							<td><input type="checkbox" name="invoice_{{item.pk}}" value="{{item.pk}}"></td>
+							<td style="font-weight: bold;">
+								<a href="/lk/invoice/{{item.pk}}/">{{item.number_invoice}}</a>
+							</td>
+                          	<td>{{item.created_at|date:"d.m.y H:i"}}</td>
+                          	{% if item.status == 0 %}
+								<td style="color:#F2C10D;">Новый</td>
+							{% elif item.status == 1 %}
+								<td style="color:#3589FD;">Заказан</td>
+							{% elif item.status == 2 %}
+								<td style="color:#000;">Принят</td>
+							{% endif %}
+                          	<td>{{item.supplier}}</td>
+                          	<td>{{item.stock_sup}}</td>
+                          	<td align="center" style="color:{{item.status.color}};font-weight:600;">{{item.total_invoice}}</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+			{% endif %}
+			</table>
+</div>
+</div>
+</div>
+
+{% endblock content %}

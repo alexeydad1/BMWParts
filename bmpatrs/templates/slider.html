@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load static from staticfiles %}
+{% block content %}
+	<div class="medium-12 columns">
+		<div class="orbit" role="region" aria-label="Favorite Space Pictures" data-orbit data-use-m-u-i="false">
+			<ul class="orbit-container">
+			  <button class="orbit-previous" aria-label="previous"><span class="show-for-sr">Previous Slide</span>&#9664;</button>
+			  <button class="orbit-next" aria-label="next"><span class="show-for-sr">Next Slide</span>&#9654;</button>
+			  <li class="is-active orbit-slide">
+				<div>
+				<p class="text-center">
+				  <a href="/"><img src={% static "img/slider/new-bmw-6-series.jpg" %} alt="Акция на моторные масла"/></a>
+				</p>
+				</div>
+			  </li>
+			  <li class="orbit-slide">
+				<div>
+				   <p class="text-center">
+				  <a href="/"><img src={% static "img/slider/bmw-6-series-gran-tu.jpg" %} alt="Акция на моторные масла"/></a>
+				  </p>
+				</div>
+			  </li>
+			  <li class="orbit-slide">
+				<div>
+				   <p class="text-center">
+				  <a href="/"><img src={% static "img/slider/bmw-m4-competition--.jpg" %} alt="Акция на моторные масла"/></a>
+				</p>
+				</div>
+			  </li>
+			  <li class="orbit-slide">
+				<div>
+				   <p class="text-center">
+				  <a href="/"><img src={% static "img/slider/bmw-m-official-car-o.jpg" %} alt="Акция на моторные масла"/></a>
+					</p>
+				</div>
+			  </li>
+			</ul>
+
+		</div>
+	</div>
+{% endblock content %}

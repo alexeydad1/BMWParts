@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+{% load static from staticfiles %}
+
+{% block title %}Клиент {{customer.fio}} | bmwminiparts.ru{% endblock %}
+{% block breadcrumbs %} {{ block.super }} <li><a href="/lk/">личный кабинет</a></li><li><a href="/lk/customer/{{customer.pk}}/">Клиенты</a></li>{% endblock %}
+{% block content %}
+{% include "lk/lk_menu.html" %}
+<div class="medium-12 columns">
+	<div  class="lk_col">
+		<div class="medium-12 columns">
+
+			<div class="medium-6 float-left columns">
+					<div class="float-left">
+					<h1 style="font-size:18px;">Клиент {{customer.fio}} </h1>
+					</div>
+					<div class="offset-1">
+					<a style="margin-left:10px;margin-bottom:10px;padding:5px 10px;background-color:#397bd9;border-color:#397bd9;border-radius:6px;color:#ffffff;" href="/lk/edit_customer/{{customer.pk}}/">Редактировать</a>
+					</div>
+
+
+					<table class="stack" width="100%">
+								<thead >
+								<tr style="text-align: center;">
+									<th>Параметр</th>
+									<th>Значение</th>
+								</tr>
+								</thead>
+						{% if customer%}
+								<tbody>
+
+									<tr>
+										<td>Ф.И.О</td>
+										<td>{{customer.fio}}</td>
+									</tr>
+									<tr>
+										<td>Телефон</td>
+										<td>{{customer.phone}}</td>
+									</tr>
+									<tr>
+										<td>Адрес</td>
+										<td>{{customer.address}}</td>
+									</tr>
+									<tr>
+										<td>E-mail</td>
+										<td>{{customer.email}}</td>
+									</tr>
+									<tr>
+										<td>VIN</td>
+										<td>{{customer.vin}}</td>
+									</tr>
+									<tr>
+										<td>Комментарий</td>
+										<td>{{customer.comment}}</td>
+									</tr>
+									<tr>
+										<td>В статусе новый</td>
+										<td>{{customer.all_new_offer}}</td>
+									</tr>
+
+								</tbody>
+						{% endif %}
+						</table>
+						<h1 style="font-size:18px;">Заявки</h1>
+						<table class="stack" width="100%">
+										<thead >
+											<tr>
+												<th>№</th>
+												<th>Номер</th>
+												<th>Статус</th>
+												<th>Дата</th>
+												<th>Сумма</th>
+											</tr>
+										</thead>
+							{% if Offers%}
+									<tbody>
+										{% for item in Offers %}
+										<tr>
+											<td align="center">{{forloop.counter}}</td>
+											<td><a href="/lk/offer_detail/{{item.pk}}/">{{item.pk}}</td>
+											<td style="color:{{item.status.color}};">{{item.status.name}}</td>
+											<td>{{item.created_at|date:"d.m.y H:i"}}</td>
+											<td style="color:{{item.status.color}};">{{item.price_offer}}</td>
+										</tr>
+										{% endfor %}
+
+									</tbody>
+							{% endif %}
+							</table>
+			</div>
+			<div class="medium-6 columns">
+				<h1 style="font-size:18px;">Баланс
+					{% if customer.balance > 0 %}
+					<span style="color:#397bd9;">{{customer.balance}}</span>
+					{% else %}
+					<span style="color:red;">{{customer.balance}}</span>
+					{% endif %}
+				</h1>
+				<br>
+				<div class="row">
+					<div class="medium-12 columns">
+						<form action="/lk/customer/{{customer.pk}}/replenish_balance/" name="replenish_balance" method="POST">
+							 {% csrf_token %}
+							<label for="id_balance">Пополнить баланс</label>
+							<div class="float-left">
+								<input style="height:25px;font-size: 0.8rem;border-color: #000;" type="text" id="balance" name="balance" value="" placeholder="Введите сумму" pattern="[0-9]{0,6}" title="Допускаются только цифры от 0 до 9 и длиной не более 6 цифр">
+							</div>
+							<div class="float-left">
+								<input style="background-color:#397bd9;border-color:#397bd9;border-radius:2px;color:#ffffff;"  type="submit" value="Пополнить">
+							</div>
+						</form>
+					 </div>
+				</div>
+				<div>
+						<h5>История платежей</h5>
+						{% if history_pay%}
+						 <table class="stack" width="100%">
+							<thead >
+							<tr>
+								<th>№</th>
+								<th>Дата</th>
+								<th>Сумма</th>
+								<th>Вид операции</th>
+							</tr>
+							</thead>
+							 <tbody>
+							 {% for item in history_pay %}
+								<tr>
+									<td align="center">{{forloop.counter}}</td>
+									<td>{{item.created_at}}</td>
+									<td>{{item.balance_price}}</td>
+									<td>{{item.operations}}</td>
+								</tr>
+							{% endfor %}
+							 </tbody>
+						 </table>
+						{% endif %}
+				</div>
+
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock content %}

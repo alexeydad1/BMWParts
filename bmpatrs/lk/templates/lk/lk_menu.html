@@ -1,0 +1,73 @@
+
+{% if user.is_staff %}
+<div class="medium-12 columns">
+<ul class="lk">
+{% if request.path == '/lk/import_price/'  %}
+  <li class="lk_tabs"><a href="/lk/import_price/" aria-selected="true">Импорт Прайсов</a></li>
+{% else %}
+  <li class="lk_tabs"><a href="/lk/import_price/">Импорт Прайсов</a></li>
+{% endif %}  
+
+{% if request.path == '/lk/orders/'  %}
+  <li class="lk_tabs"><a href="/lk/orders/" aria-selected="true">Заказы</a></li>
+{% else %}
+  <li class="lk_tabs"><a href="/lk/orders/">Заказы</a></li>
+{% endif %}  
+
+{% if request.path == '/lk/customers/'  %}
+  <li class="lk_tabs"><a href="/lk/customers/" aria-selected="true">Клиенты</a></li>
+{% else %}
+  <li class="lk_tabs"><a href="/lk/customers/">Клиенты</a></li>
+{% endif %}
+
+{% if request.path == '/lk/users/'  %}
+  <li class="lk_tabs"><a href="/lk/users/" aria-selected="true">Пользователи</a></li>
+{% else %}
+  <li class="lk_tabs"><a href="/lk/users/">Пользователи</a></li>
+{% endif %}
+
+{% if request.path == '/lk/invoices/'  %}
+  <li class="lk_tabs"><a href="/lk/invoices/" aria-selected="true">Накладные</a></li>
+{% else %}
+  <li class="lk_tabs"><a href="/lk/invoices/">Накладные</a></li>
+{% endif %}  
+  
+{% if request.path == '/lk/offers/'  %}
+  <li class="lk_tabs"><a href="/lk/offers/" aria-selected="true">Заявки</a></li>
+{% else %}
+  <li class="lk_tabs"><a href="/lk/offers/">Заявки</a></li>
+{% endif %}  
+  
+{% if request.path == '/lk/statistics/'  %}
+  <li class="lk_tabs"><a href="/lk/statistics/" aria-selected="true">Статистика</a></li>
+{% else %}
+  <li class="lk_tabs"><a href="/lk/statistics/">Статистика</a></li>
+{% endif %}  
+</ul>
+</div>
+{% else %}
+<div class="medium-12 columns">
+<ul class="lk">
+
+  {% if request.path == '/lk/'  %}
+  <li class="lk_tabs"><a href="/lk/" aria-selected="true">Личный кабинет</a></li>
+  {% else %}
+  <li class="lk_tabs"><a href="/lk/">Личный кабинет</a></li>
+  {% endif %}  
+  
+  {% if request.path == '/lk/orders/'  %}
+  <li class="lk_tabs"><a href="/lk/orders/" aria-selected="true">Заказы</a></li>
+  {% else %}
+  <li class="lk_tabs"><a href="/lk/orders/">Заказы</a></li>
+  {% endif %}
+  
+  {% if request.path == '/lk/drafts/'  %}
+  <li class="lk_tabs"><a href="/lk/drafts/" aria-selected="true">Черновики</a></li>
+  {% else %}
+  <li class="lk_tabs"><a href="/lk/drafts/">Черновики</a></li>
+  {% endif %}
+
+  
+</ul>
+</div>
+{% endif %}

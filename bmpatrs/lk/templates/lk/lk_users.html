@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Личный кабинет | bmwminiparts.ru{% endblock %}
+{% block breadcrumbs %} {{ block.super }}<li><a href="/lk/">личный кабинет</a></li>{% endblock %}
+{% block content %}
+{% include "lk/lk_menu.html" %}
+
+<div class="medium-12 columns">
+	<div  class="lk_col">
+		<div class="medium-12 columns">
+		<table class="stack">
+				<thead>
+				<tr>
+					<th>№</th>
+					<th>Логин</th>
+					<th>Имя</th>
+					<th>Фамилия</th>
+					<th>Телефон</th>
+					<th>E-mail</th>
+					<th>Баланс</th>
+					<th>Скидка</th>
+				</tr>
+				</thead>
+				<tbody>
+				{% for user in accounts%}
+					<tr>
+						<td>{{forloop.counter}}</td>
+						<td><a href="/lk/user_detail/{{user.pk}}/">{{user.username}}</a></td>
+						<td>{{user.first_name}}</td>
+						<td>{{user.last_name}}</td>
+						<td>{{user.telephone}}</td>
+						<td>{{user.email}}</td>
+						<td>{{user.balance}}</td>
+						<td>{{user.discount}}</td>
+					</tr>
+				{% endfor %}
+				</tbody>
+			</table>
+</div>
+</div>
+</div>
+{% endblock content %}

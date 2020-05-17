@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% load static from staticfiles %}
+
+{% block title %}Статистика | bmwminiparts.ru{% endblock %}
+{% block breadcrumbs %} {{ block.super }} <li><a href="/lk/">личный кабинет</a></li><li><a href="/lk/statistics/">Статистика</a></li>{% endblock %}
+{% block content %}
+{% include "lk/lk_menu.html" %}
+<div class="medium-12 columns">
+	<div  class="lk_col">
+<div class="medium-12 columns">
+
+	<h5>Заказы</h5>
+	<div class="row">
+		<form name="invoice_update" method="POST" action="/lk/invoice_update/{{invoice.pk}}/" >
+			  {% csrf_token %}
+		<div class="medium-2 columns">
+			{{ form.periodstart.errors }}
+			<label for="id_periodstart">Выберите период начало:</label>
+			{{ form.periodstart }}
+		</div>
+		<div class="medium-2 float-left columns">
+			{{ form.periodend.errors }}
+			<label for="id_periodend">Выберите период конец:</label>
+			{{ form.periodend }}
+		</div>
+		</form>
+	</div>
+	<div class="row">
+		<div class="medium-6 columns">
+
+		<table class="stack" width="100%">
+					<thead >
+					<tr>
+                       	<th>Статус</th>
+						<th>Количество</th>
+						<th>Сумма</th>
+					</tr>
+					</thead>
+			{% if offers%}
+					<tbody>
+						{% for item in offers %}
+							<tr>
+								<td style="color:{{item.status.color}};">{{item.status}}</td>
+								<td style="color:{{item.status.color}};">{{item.count}}</td>
+								<td style="color:{{item.status.color}};">{{item.summ}}</td>
+							</tr>
+      					{% endfor %}
+					</tbody>
+			{% endif %}
+			</table>
+			</div>
+	</div>
+	<h5>Запчасти</h5>
+	<div class="row">
+		<div class="medium-10 columns">
+			{{parts|length}}
+
+			<table class="stack" width="100%">
+					<thead>
+						<tr>
+                            <th>№</th>
+							<th style="width:5%;">Бренд</th>
+							<th style="width:5%;">Номер запчасти</th>
+							<th style="width:45%;">Описание</th>
+							<th style="width:15%;">Кол-во</th>
+						</tr>
+					</thead>
+				{% if parts %}
+					<tbody>
+						{% for item in parts %}
+						<tr>
+                            <td align="center">{{forloop.counter}}</td>
+							<td style="color:#397bd9;font-weight:600;">{{item.brand}}</td>
+							<td>{{item.product}}</td>
+							<td>{{item.description}}</td>
+							<td>{{item.quantity}}</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				{% endif %}
+			</table>
+
+		</div>
+	</div>
+</div>
+</div>
+</div>
+
+{% endblock content %}

@@ -1,0 +1,260 @@
+{% extends "base.html" %}
+{% load static from staticfiles %}
+
+{% block title %}{{ p }} {{producer}} {{ descript }} купить по самой выгодной цене в СПб | bmwminiparts.ru{% endblock %}
+{% block description %}{{p}} {{producer}} {{descript}}{% endblock %}
+{% block keywords %}{{p}}, {{descript}}, {{producer}}, цена, купить{% endblock %}
+{% block breadcrumbs %}{{ block.super }} <li><a href="/search?partnumber={{ p }}">{{p}} {{producer}} {{descript}}</a></li>{% endblock %}
+{% block content %}
+
+<div class="medium-12 columns">
+
+		{% if many_products %}
+		
+		<table class="stack" width="100%">
+					<thead>
+					<tr>
+                        <th>Бренд</th>
+						<th>Номер</th>
+						<th>Описание</th>
+						<th></th>
+					</tr>
+					</thead>
+					<tbody>
+					{% for m_product in many_products %}
+					<tr>
+                        <td style="color:#397bd9;font-weight:600;">{{m_product.producer}}</td>
+						<td style="color:#000;font-size:13px;font-weight:600;">{{m_product.partnumber}}</td>
+						<td>{{m_product.description}}</td>
+						<td><a href="/search/{{m_product.producer}}/{{m_product.partnumber}}/">Поиск</a></td>
+					</tr>
+					{% endfor %}
+					</tbody>
+			</table>
+
+		{% endif %}
+		{% if no_price %}
+			<h5>Запрошенный артикул:</h5><h1 style="font-size:1.5rem;"><span style="color:#489afe;">{{p}}</span> <span style="color:#01204e;">{{no_price.producer}}</span> <span style="color:#ec0404;">{{no_price.description}}</span></h1>
+			<table class="stack" width="100%">
+					<thead>
+					<tr>
+                        <th>Бренд</th>
+						<th>Номер</th>
+						<th>Описание</th>
+						<th>Склад</th>
+						<th>Доставка</th>
+						<th>Цена</th>
+						<th><img src={% static "img/shop_cart.png" %} width="30px"></th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr>
+                        <td style="color:#397bd9;font-weight:600;">{{no_price.producer}}</td>
+						<td style="color:#000;font-size:13px;font-weight:600;">{{no_price.partnumber}}</td>
+						<td>{{no_price.description}}</td>
+						<td>---</td>
+						<td>---</td>
+						<td><a href="#modal1" class="open_modal">Запрос цены</a></td>
+						<td><img src={% static "img/shop_cart.png" %} width="30px"></td>
+					</tr>
+					</tbody>
+			</table>
+
+			<div id="modal1" class="modal_div" style="display: none; top: 45%; opacity: 0;">
+				<span class="modal_close">Закрыть Х</span>
+				<p>Запрос цены на деталь:</br><span style="font-weight:600;">{{no_price.partnumber}} - {{no_price.description}}</span></br>
+				или позвоните нам +7(911) 121-62-53
+				</p>
+				<p id="messenger">
+                <form action="/inquiry/{{no_price.partnumber}}/" method="POST">
+                {% csrf_token %}
+						<input type="text" name="name" value="" placeholder="Ваше Имя" size="40" pattern="[а-яА-яa-zA-z]{3,}" title="Допускаются только буквы Русского и Латинского алфавита">
+						<input type="text" name="telephone" id="telephone" value="" placeholder="Ваш Телефон" size="40" pattern="+7([0-9]{3}) [0-9]{3}-[0-9]{2}-[0-9]{2}" title="Допускаются только цифры от 0 до 9">
+						<input type="text" name="e_mail" value="" placeholder="Ваш E-mail" size="40" pattern="[a-zA-Z0-9._\-!$&*=^`|~#%'+\/?_{}]+@[a-z0-9.]+.[a-z]+" title="Проверьте введенный Вами e-mail адрес">
+						<textarea rows="3" cols="45" name="comment" placeholder="Ваши комментарии" size="255"></textarea>
+						<input class="button" type="submit" value="Отправить">
+				</form>
+				</p>
+			</div>
+
+
+				{% if no_price_cross_parts or cross_parts %}		
+					<h6>Аналоги запчастей:</h6>
+					<table class="stack" width="100%">
+						<thead >
+						<tr>
+                            <th>Бренд</th>
+							<th>Номер</th>
+							<th>Описание</th>
+							<th>Склад</th>
+							<th>Доставка</th>
+							<th>Цена</th>
+							<th><img src={% static "img/shop_cart.png" %} width="30px"></th>
+						</tr>
+						</thead>
+						<tbody>						
+						{% for parts in cross_parts %}
+							<tr>
+                               	<td style="color:#397bd9;font-weight:600;">{{parts.producer}}</td>
+								<td style="color:#000;font-size:13px;font-weight:600;">{{parts.p_product}}</td>
+								<td>{{parts.description}}</td>
+								<td>{{parts.qty}} шт.</td>
+								<td>{{parts.delivery_time}} дн.</td>
+								<td style="color:#397bd9;font-weight:600;" onmouseover="document.getElementById('date_price_no_price_{{forloop.counter}}').style.display='block';" onmouseout="document.getElementById('date_price_no_price_{{forloop.counter}}').style.display='none';">
+                                {{parts.our_price}} руб.
+                                <span id="date_price_noprice_{{forloop.counter}}" class="hovertip">Дата обновления</br>{{parts.created_at}}</span>
+                                </td>
+								<td><a href="/add_to_cart/{{parts.p_product}}_{{parts.id_stock}}_{{parts.pk}}_{{parts.producer_pk}}/"><img src={% static "img/shop_cart.png" %} width="30px"></a></td>
+							</tr>
+						
+						{% endfor %}						
+						{% for part in no_price_cross_parts %}
+							<tr>
+								<td style="color:#397bd9;font-weight:600;">{{part.producer}}</td>
+								<td>{{part.partnumber}}</td>
+								<td>{{part.description}}</td>
+								<td>---</td>
+								<td>---</td>
+								<td style="color:#397bd9;font-weight:600;">---</td>
+								<td><img src={% static "img/shop_cart.png" %} width="30px"></a></td>
+							</tr>
+						{% endfor %}
+						</tbody>
+					</table>
+			{% endif %}
+		{% endif %}
+
+		{% if parts%}
+			{% if error_cart%}
+				<p class="text-center"><font color="#ff0000">{{ error_cart}}</font></p>
+			{% endif %}
+			<div>Запрошенный артикул:<h1 style="font-size:1.5rem;"><span style="color:#489afe;">{{p}}</span> <span style="color:#01204e;">{{producer}}</span> <span style="color:#ec0404;">{{descript}}</span></h1></div>
+	        <table class="stack" width="100%">
+					<thead >
+					<tr>
+                      	<th style="width:10%">Бренд</th>
+                        <th style="width:10%;">Номер</th>
+						<th style="width:45%;">Описание</th>
+						<th style="width:5%;">Склад</th>
+						<th style="width:5%;">Доставка</th>
+                        <th style="width:5%;"><img src="{% static "img/info.png" %}" width="30px"></img></th>
+						<th style="width:10%;">Цена</th>
+						{% if perms.catalog.can_price_dealer %}
+						<th style="width:5%;">Цена дилера</th>
+						{% endif %}
+						<th style="width:5%;"><img src="{% static "img/shop_cart.png" %}" width="30px"></img></th>
+					</tr>
+					</thead>
+					<tbody>
+					{% for price in parts %}
+					<tr>
+                        <td data-title="Бренд" style="color:#397bd9;font-size:13px;font-weight:600;">{{product.producer}}</td>
+                        <td data-title="Номер" style="color:#000;font-size:13px;font-weight:600;">{{price.p_product}}</td>
+						<td data-title="Описание">{{product.description}}</td>
+						<td data-title="Склад">{{price.qty}} шт.</td>
+                        {% if price.id_stock.delivery_time != 0 %}
+						<td data-title="Доставка">{{price.id_stock.delivery_time}} дн.</td>
+                        {% else %}
+                        <td data-title="Доставка"><span style="color:green;">Сегодня</span></td>
+                        {% endif%}
+                        <td  onmouseover="document.getElementById('date_price_{{forloop.counter}}').style.display='block';" onmouseout="document.getElementById('date_price_{{forloop.counter}}').style.display='none';"><img src="{% static "img/info.png" %}" width="30px"></img>
+                            <span id="date_price_{{forloop.counter}}" class="hovertip">Обновлена</br>{{price.created_at|date:"d.m.y H:i"}}</br>{{price.id_stock.delivery_comment}}</span>
+                        </td>
+						<td data-title="Цена" style="color:#397bd9;font-weight:600;">
+                        {% if price.our_price_discount %}
+							<span style="text-decoration:line-through;">
+							{{price.our_price}} руб.
+							</span>
+							<br>
+							<span style="color:#ec0404;">
+							{{price.our_price_discount}} руб.
+							</span>
+						{% else %}
+							{{price.our_price}} руб.
+						{% endif %}
+                        </td>
+                        {% if perms.catalog.can_price_dealer %}
+						<td data-title="Цена дилера">{{price.dealer_price}}</td>
+						{% endif %}
+						<td data-title="Купить"><a href="/add_to_cart/{{price.p_product}}_{{price.id_stock.pk}}_{{price.pk}}_{{product.producer.pk}}/"><img src="{% static "img/shop_cart.png"%}" width="30px"></img></a></td>
+					</tr>
+					{% endfor %}
+					</tbody>
+				</table>
+
+			{% if cross_parts or no_price_cross_parts %}
+					<h6>Аналоги запчастей:</h6>
+					<table class="stack" width="100%">
+						<thead >
+						<tr>
+                           	<th style="width:10%;">Бренд</th>
+							<th style="width:10%;">Номер</th>
+							<th style="width:45%;">Описание</th>
+							<th style="width:5%;">Склад</th>
+							<th style="width:5%;">Доставка</th>
+                            <th style="width:5%;"><img src="{% static "img/info.png" %}" width="30px"></img></th>
+							<th style="width:10%;">Цена</th>
+                            {% if perms.catalog.can_price_dealer %}
+						    <th style="width:5%;">Цена дилера</th>
+						    {% endif %}
+							<th style="width:5%;"><img src={% static "img/shop_cart.png" %} width="30px"></th>
+						</tr>
+						</thead>
+						<tbody>						
+						{% for parts in cross_parts %}
+							<tr>
+                                <td style="color:#397bd9;font-weight:600;">{{parts.producer}}</td>
+								<td style="color:#000;font-size:13px;font-weight:600;">{{parts.p_product}}</td>
+								<td>{{parts.description}}</td>
+								<td>{{parts.qty}} шт.</td>
+                                {% if parts.delivery_time != 0 %}
+								<td>{{parts.delivery_time}} дн.</td>
+                                {% else %}
+                                <td><span style="color:green;">Сегодня</span></td>
+                                {% endif%}
+                                <td onmouseover="document.getElementById('date_price_cross_{{forloop.counter}}').style.display='block';" onmouseout="document.getElementById('date_price_cross_{{forloop.counter}}').style.display='none';"><img src="{% static "img/info.png" %}" width="30px"></img>
+                                    <span id="date_price_cross_{{forloop.counter}}" class="hovertip">Обновлена</br>{{parts.created_at}}</br>{{parts.id_stock.delivery_comment}}</span>
+                                </td>
+								<td style="color:#397bd9;font-weight:600;">
+                                 {% if parts.our_price_discount  %}
+									<span style="text-decoration:line-through;">
+									{{parts.our_price}} руб.
+									</span>
+									<br>
+									<span style="color:#ec0404;">
+									{{parts.our_price_discount}} руб.
+									</span>
+								{% else %}
+									{{parts.our_price}} руб.
+								{% endif %}
+                                </td>
+                                {% if perms.catalog.can_price_dealer %}
+						        <td data-title="Цена дилера">{{parts.dealer_price}}</td>
+						        {% endif %}
+								<td><a href="/add_to_cart/{{parts.p_product}}_{{parts.id_stock}}_{{parts.pk}}_{{parts.producer_pk}}/"><img src={% static "img/shop_cart.png" %} width="30px"></a></td>
+							</tr>
+							
+						{% endfor %}
+						{% for part in no_price_cross_parts %}
+							<tr>
+								<td style="color:#397bd9;font-weight:600;">{{part.producer}}</td>
+								<td style="color:#000;font-size:13px;font-weight:600;">{{part.partnumber}}</td>
+								<td>{{part.description}}</td>
+								<td>---</td>
+								<td>---</td>
+								<td style="color:#397bd9;font-weight:600;">---</td>
+								<td><img src={% static "img/shop_cart.png" %} width="30px"></a></td>
+							</tr>
+						{% endfor %}
+						</tbody>
+					</table>
+			{% endif %}
+		{% else %}
+			<div class="small-6 medium-12 columns">
+				<p class="text-center"><font color="#ff0000">{{ error_request}}</font></p>
+			</div>
+		{% endif %}
+
+</div>
+
+{% endblock content %}

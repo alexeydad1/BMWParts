@@ -1,0 +1,5 @@
+.idea
+bmpatrs.tar
+/bmpatrs/media
+/bmpatrs/static
+/bmpatrs/api_mg.py

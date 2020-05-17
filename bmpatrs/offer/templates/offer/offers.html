@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% load static from staticfiles %}
+
+{% block title %}Заявки | bmwminiparts.ru{% endblock %}
+{% block breadcrumbs %} {{ block.super }} <li><a href="/lk/">личный кабинет</a></li><li><a href="/lk/offers/">Заявки</a></li>{% endblock %}
+{% block content %}
+{% include "lk/lk_menu.html" %}
+<div class="medium-12 columns">
+	<div  class="lk_col">
+		<div class="medium-12 columns">
+				<a style="margin-bottom:10px;padding:5px 10px;background-color:#397bd9;border-color:#397bd9;border-radius:6px;color:#ffffff;" href="/lk/new_offer/">Новая заявка</a>
+
+
+			<div class="row">
+				<div class="medium-4 columns">
+					<form action="/lk/offers/" method="POST" name="offer_filter">
+						{% csrf_token %}
+						<label for="id_status">Статус:</label>
+						<div class="float-left">
+								{{ form.status.errors }}
+								{{ form.status }}
+						 </div>
+						<div>
+								<input style="margin-bottom:10px;background-color:#397bd9;border-color:#397bd9;border-radius:2px;color:#ffffff;" type="submit" value="Показать"/>
+						</div>
+
+					</form>
+				</div>
+			</div>
+				<table class="stack" width="100%">
+							<thead >
+							<tr style="text-align: center;">
+								<th>№</th>
+								<th width=80px>№ Заявки</th>
+								<th width=50px>Статус</th>
+								<th>Дата оформления</th>
+								<th>Ф.И.О</th>
+								<th>Телефон</th>
+								<th>Комментарий</th>
+								<th>VIN</th>
+								<th width=50px>Сумма</th>
+							</tr>
+							</thead>
+					{% if offers%}
+							<tbody>
+								{% for item in offers %}
+								<tr>
+									<td align="center">{{forloop.counter}}</td>
+									<td style="font-weight: bold;">
+										<a href="/lk/offer_detail/{{item.pk}}/">{{item.pk}}</a>
+									</td>
+									<td align="center" style="font-weight: bold;color:{{item.status.color}};">{{item.status}}</td>
+									<td>{{item.created_at|date:"d.m.y H:i"}}</td>
+									<td>{{item.customer}}</td>
+									<td>{{item.phone}}</td>
+									<td>{{item.comment}}</td>
+									<td>{{item.vin}}</td>
+									<td align="center" style="color:{{item.status.color}};font-weight:600;">{{item.price_all_offer}}</td>
+								</tr>
+								{% endfor %}
+							</tbody>
+					{% endif %}
+					</table>
+
+
+
+
+
+						Cтраница {{ offers.number }} из {{ offers.paginator.num_pages }}.
+
+			<ul class="pagination">
+			 {% if offers.has_previous %}
+				 <li class="arrow unavailable"><a href="?page={{ offers.previous_page_number }}">&laquo;</a></li>
+			 {% endif %}
+			  <li class="current"><a href="/lk/offers/?page=1">1</a></li>
+			  <li><a href="/lk/offers/?page=2">2</a></li>
+			  {% if offers.has_next %}
+				<li class="arrow"><a href="?page={{ offers.next_page_number }}">&raquo;</a></li>
+			  {% endif %}
+			</ul>
+		</div>
+</div>
+</div>
+{% endblock content %}

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load static from staticfiles %}
+
+{% block title %}Новый клиент | bmwminiparts.ru{% endblock %}
+{% block breadcrumbs %} {{ block.super }} <li><a href="/lk/">личный кабинет</a></li><li><a href="/lk/customer//">Клиент</a></li>{% endblock %}
+{% block content %}
+{% include "lk/lk_menu.html" %}
+<div class="medium-12 columns">
+	<div  class="lk_col">
+    <div class="medium-4 float-left columns">
+         {% if edit_form.fio.value  %}
+            <h5>Клиент <span style="color:#397bd9;">{{edit_form.fio.value}}</span></h5>
+         {% else %}
+            <h5>Новый клиент</h5>
+         {% endif %}
+         <form class='edit_form' method="POST">
+                {% csrf_token %}
+                {{ edit_form.as_p }}
+                <input type="submit" style="background-color:#397bd9;border-color:#397bd9;border-radius:2px;color:#ffffff;" value="Сохранить"/>
+         </form>
+    </div>
+</div>
+</div>
+{% endblock content %}

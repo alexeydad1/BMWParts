@@ -1,0 +1,136 @@
+﻿{% extends "base.html" %}
+{% load static from staticfiles %}
+{% block description %}Корзина пользователя на сайте bmwminiparts.ru, в корзине вы можете создать черновик для деталей которые часто покупаете, например запчасти для ТО, а также оформить заказ{% endblock %}
+{% block keywords %}Личный кабинет, история платежей, баланс, bmwminiparts.ru{% endblock %}
+{% block title %}Корзина | bmwminiparts.ru{% endblock %}
+{% block breadcrumbs %} {{ block.super }} <li><a href="/cart/">Корзина</a></li>{% endblock %}
+{% block content %}
+
+<style>
+
+
+		.cart_qty{
+			display:inline-block;
+			margin-top:13px;
+			height:24px;
+			text-align:center;
+			width:40px;
+		}
+		span {cursor:pointer; }
+
+		.minus, .plus{
+			display:inline-block;
+			margin-top:12px;
+			font-size:14px;
+			font-weight:600;
+			width:25px;
+			background:#f2f2f2;
+			border-radius:4px;
+			padding:6px 4px 6px 4px;
+			border:1px solid #ddd;
+			text-align:center;
+		}
+
+
+
+</style>
+
+
+<div class="medium-12 columns">
+		<h1 style="font-size:18px;">Корзина</h1>
+		{% if cart%}
+			<p>В корзине {{ cartItem }} товар{{ cartItem|pluralize:"ов" }}.</p>
+</div>
+		<div class="row">
+			<div class="medium-12 columns">
+				{% if username %}
+						<div class="medium-6 columns">
+							<form action="/lk/add_draft/" method='POST' name='add_draft'>
+                                {% csrf_token %}
+								<div class="float-left">
+									<input style="height:25px;font-size: 0.8rem;border-color: #000;" type="text" name="name_draft" value="" placeholder="Название черновика">
+								</div>
+								<div class="float-left">
+									<input style="margin-left:5px;background-color:#397bd9;border-color:#397bd9;border-radius:6px;color:#ffffff;" type="submit" value="Создать черновик"></button>
+								</div>
+							</form>
+						</div>
+						<div class="medium-6 columns">
+							<form action="/lk/add_to_draft/" method='POST' name='add_to_draft_old'>
+                                {% csrf_token %}
+								<div class="float-left">
+								{{form}}
+								</div>
+								<div class="float-left">
+									<input style="margin-left:5px;background-color:#397bd9;border-color:#397bd9;border-radius:6px;color:#ffffff;" type="submit" value="Добавить в черновик"></button>
+								</div>
+							</form>
+						</div>
+			</div>
+				{% endif %}
+		</div>
+	<div class="medium-12 columns">
+
+				<form action='/update_cart/' method='POST' name='updatecart'>{% csrf_token %}
+				<table class="stack" width="100%">
+					<thead >
+					<tr>
+                        <th>№</th>
+						<th>Бренд</th>
+						<th>Номер запчасти</th>
+						<th>Описание</th>
+						<th>Цена</th>
+						<th>Количество</th>
+						<th>Сумма</th>
+						<th width=50px></th>
+					</tr>
+					</thead>
+					
+					{% for item in cart %}
+					
+					<tr>
+                        <td align="center">{{forloop.counter}}</td>
+						<td style="text-align:left;">{{item.product.producer}}</td>
+						<td>
+							{{item.product}}
+							<input type="hidden" name="id_product" value="{{item.product}}">
+							<input type="hidden" name="stk" value="{{item.stock.pk}}">
+							<input type="hidden" name="prd" value="{{item.brand.pk}}">
+						</td>
+						<td>{{item.product.description}}</td>
+						<td>
+							{{item.unit_price}} 
+						</td>
+						<td>
+									<button class="minus">-</button>
+									<input class="cart_qty" type="text" name="qty" value="{{item.quantity}}">
+									<button class="plus">+</button>
+						</td>
+						<td style="color:#397bd9;font-weight:600;">{{item.total_price}}</td>
+						<td><a href="/del_cart/{{item.product}}_{{item.stock.pk}}_{{item.brand.pk}}/"><img src={% static "img/del_cart.png" %} alt="" width="16px"></a></td>
+					</tr>
+		
+					{% endfor %}
+				</table>
+				
+					<div class="float-right"><p style="font-weight:bold;">Итого: {{cartTotal}} руб.</p>
+						<div class="float-left">
+						<input style="margin:2px 2px;background-color:#397bd9;border-color:#397bd9;border-radius:6px;color:#ffffff;" type="submit" value="Пересчитать заказ">
+						</div>
+				</form>
+					{% if cartItem %}
+							<div class="float-left">
+								<form action="/order/">
+									<input style="margin:2px 2px;background-color:#397bd9;border-color:#397bd9;border-radius:6px;color:#ffffff;" type="submit" value="Оформить заказ"></button>
+								</form>
+							</div>
+					</div>
+					
+					{% endif %}
+		{% else %}
+			<div class="small-6 medium-12 columns">
+				<p class="text-center"><font color="#ff0000">{{ error_request}}</font></p>
+			</div>
+		{% endif %}
+</div>
+{% endblock content %}

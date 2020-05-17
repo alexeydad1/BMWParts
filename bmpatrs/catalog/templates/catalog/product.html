@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load static from staticfiles %}
+
+{% block title %}Купить - {{ p }} {{}} | bmwminiparts.ru{% endblock %}
+{% block breadcrumbs %}{{ block.super }} <li><a href="/search?partnumber={{ p }}">Поиск запчастей</a></li>{% endblock %}
+{% block content %}
+		
+<div class="medium-12 columns">
+		{% if product %}
+		<h6>Запрошенный артикул:</h6>
+		<table class="stack" width="100%">
+					<thead>
+					<tr>
+                        <th>№</th>
+					{% if perms.catalog.can_id_stock %}
+						<th>#</th>
+					{% endif %}
+						<th>Бренд</th>
+						<th>Номер запчасти</th>
+						<th>Описание</th>
+						<th>Наличие</th>
+						<th>Срок доставки</th>
+					{% if perms.catalog.can_purchase_price %}
+						<th style="color:red;">ЗАКУПКА</th>
+					{% endif %}
+						<th>Цена</th>
+						<th>+</th>
+					</tr>
+					</thead>
+					<tbody>
+					{% for price in parts %}
+					<tr>
+                        <td align="center">{{forloop.counter}}</td>
+					{% if perms.catalog.can_id_stock %}
+						<td style="color:#397bd9;font-size:13px;font-weight:600;">#{{price.id_stock.pk}}</td>
+					{% endif %}
+						<td style="color:#397bd9;font-size:13px;font-weight:600;">{{product.producer}}</td>
+						<td>{{price.p_product}}</td>
+						<td>{{product.description}}</td>
+						<td>{{price.qty}}</td>
+						<td>{{price.id_stock.delivery_time}} </td>
+					{% if perms.catalog.can_purchase_price %}
+						<td style="color:red;font-weight:600;">{{price.purchase_price}} </td>
+					{% endif %}
+						<td style="color:#397bd9;font-weight:600;">{{price.our_price}} </td>
+						<td width="50px"><a href="/add_to_cart/{{price.p_product}}_{{price.id_stock.pk}}_{{price.pk}}/"><img src={% static "img/shop_cart.png" %}></a></td>
+					</tr>
+					{% endfor %}
+					</tbody>
+			</table>
+		{% endif %}
+
+
+			{% if error_cart%}
+				<p class="text-center"><font color="#ff0000">{{ error_cart}}</font></p>
+			{% endif %}
+
+
+
+</div>
+{% endblock content %}

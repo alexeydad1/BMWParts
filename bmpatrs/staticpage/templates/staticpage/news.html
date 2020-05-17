@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load static from staticfiles %}
+
+{% block title %}Новости мира BMW, новости сайта bmwminiparts.ru{% endblock %}
+{% block breadcrumbs %} {{ block.super }} <li><a href="/news/">Новости</a></li>{% endblock %}
+{% block content %}
+	<div class="medium-12 columns">
+		<h1 style="font-size:1.5rem;">Новости</h1>
+		<p>В данном разделе публикуются новости компании BMWMINIPARTS.RU и новости из мира BMW и MINI.</p>
+		<h3 style="padding-top:20px;text-align:center;">Пока новостей нет, но скоро они появятся!</h3>
+
+	</div>
+{% endblock content %}

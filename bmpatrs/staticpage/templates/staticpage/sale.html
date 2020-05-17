@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load static from staticfiles %}
+
+{% block title %}Акции и специальные предложения на запчасти БМВ на сайте bmwminiparts.ru в Санкт-Петербурге{% endblock %}
+{% block description %}{{p}} {{descript}} {{producer}}{% endblock %}
+{% block keywords %}{{p}}, {{descript}}, {{producer}}, цена, купить{% endblock %}
+{% block breadcrumbs %} {{ block.super }} <li><a href="/sale/">Акции</a></li>{% endblock %}
+{% block content %}
+	<div class="medium-12 columns">
+		<h1 style="font-size:1.5rem;">Акции</h1>
+		<p>В данном разделе размещены <span style="font-weight: bold;">Акции</span> компании <span style="font-weight: bold;">BmwMminiPparts.ru</span> и наших Партнеров.</p>
+	</div>
+{% endblock content %}

@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load static from staticfiles %}
+
+{% block title %}Клиенты | bmwminiparts.ru{% endblock %}
+{% block breadcrumbs %} {{ block.super }} <li><a href="/lk/">личный кабинет</a></li><li><a href="/lk/customers/">Клиенты</a></li>{% endblock %}
+{% block content %}
+{% include "lk/lk_menu.html" %}
+<div class="medium-12 columns">
+	<div  class="lk_col">
+		<div class="medium-12 columns">
+		<div style="margin:10px 0px;">
+			<a style="margin:10px 0px;padding:5px 10px;background-color:#397bd9;border-color:#397bd9;border-radius:6px;color:#ffffff;" href="/lk/new_customer/">Новый клиент</a>
+		</div>
+			<table class="stack" width="100%">
+					<thead >
+					<tr style="text-align: center;">
+						<th>№</th>
+						<th width=80px>Создан</th>
+                      	<th width=50px>Ф.И.О</th>
+						<th>Телефон</th>
+                      	<th>E-mail</th>
+                      	<th>VIN</th>
+                      	<th>Адрес</th>
+                      	<th>Комментарий</th>
+						<th width=50px>Баланс</th>
+                        <th width=50px>Новые заявки</th>
+						<th width=50px>Х</th>
+					</tr>
+					</thead>
+			{% if customers%}
+					<tbody>
+						{% for item in customers %}
+						<tr>
+							<td align="center">{{forloop.counter}}</td>
+							<td>{{item.created_at|date:"d.m.y H:i"}}</td>
+							<td style="font-weight: bold;">
+								<a href="/lk/customer/{{item.pk}}/">{{item.fio}}</a>
+							</td>
+							<td>{{item.phone}}</td>
+							<td>{{item.email}}</td>
+							<td>{{item.vin}}</td>
+                          	<td>{{item.address}}</td>
+							<td>{{item.comment}}</td>
+   							<td>{{item.balance}}</td>
+                            <td>-{{item.all_new_offer}}</td>
+							<td><a href="/lk/del_customer/{{item.pk}}/"><img src={% static "img/del_cart.png" %} alt="" width="16px"></a></td>
+						</tr>
+						{% endfor %}
+					</tbody>
+			{% endif %}
+			</table>
+</div>
+</div>
+</div>
+
+{% endblock content %}

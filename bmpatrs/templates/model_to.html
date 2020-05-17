@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% load static from staticfiles %}
+
+{% block title %}Комплекты для Технического обслуживания автомобилей BMW  и MINI | bmwminiparts.ru{% endblock %}
+{% block breadcrumbs %} {{ block.super }} <li><a href="/to_all_bmw/">Комплекты ТО для BMW и Mini</a></li>{% endblock %}
+{% block content %}
+<style>
+.motor{
+	list-style: none; /* Убираем исходные маркеры */
+  	font-size:18px;
+  	margin:0;
+
+}
+.motor li img{
+	padding-right:20px;
+}
+
+</style>
+{% if models %}
+	<div class="medium-12 columns">
+		{% for model in models%}
+			<div class="medium-4 columns">
+				<h4>Кузов {{model.model}}</h4>
+				<img src="/static{{model.img}}">
+				<h5>Двигатели</h5>
+				<ul class="motor">
+				{% for motor in model.motor%}
+					<li><a href="/to_model_{{series}}_series/{{model.model}}/{{motor}}/"><img src="{% static "img/engine_3.png" %}">{{motor}}</a></li>
+				{% endfor %}
+				</ul>
+			</div>
+		{% endfor %}
+	</div>
+{% endif%}
+
+
+{% if parts %}
+	<div class="medium-12 columns">
+		<div class="medium-4 columns">
+			<img src="/static/img/models/kuzov/{{kuzov}}.png">
+		</div>
+		<div class="medium-8 columns">
+			<h4>BMW {{kuzov}} {{motor}}</h4>
+			<table class="stack" width="100%">
+						<thead >
+							<tr>
+								<th align="center" style="width:5%;">№</th>
+								<th>Запчасть</th>
+								<th align="center" style="width:10%;">Необходимое кол-во</th>
+								<th align="center">Цены</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td align="center">1</td>
+								<td>Фильтр Масляный</td>
+								<td align="center">1 шт.</td>
+								<td align="center" valign="bottom"><a class="button" href="/search?partnumber={{parts.oil_filter}}">Цены</a></td>
+							</tr>
+							<tr>
+								<td align="center">2</td>
+								<td>Фильтр Воздушный</td>
+								<td align="center">1 шт.</td>
+								<td align="center"><a class="button" href="/search?partnumber={{parts.air_filter}}">Цены</a></td>
+							</tr>
+							<tr>
+								<td align="center">3</td>
+								<td>Фильтр салонный</td>
+								<td align="center">1 шт.</td>
+								<td align="center"><a class="button" href="/search?partnumber={{parts.salon_filter}}">Цены</a></td>
+							</tr>
+							<tr>
+								<td align="center">4</td>
+								<td>Колодки тормозные, комплект, передние</td>
+								<td align="center">1 шт.</td>
+								<td align="center"><a class="button" href="/search?partnumber={{parts.break_front}}">Цены</a></td>
+							</tr>
+							<tr>
+								<td align="center">5</td>
+								<td>Колодки тормозные, комплект, задние</td>
+								<td align="center">1 шт.</td>
+								<td align="center" valign="bottom"><a class="button" href="/search?partnumber={{parts.break_rear}}">Цены</a></td>
+							</tr>
+							<tr>
+								<td align="center">6</td>
+								<td>Диск тормозной, передний</td>
+								<td align="center">2 шт.</td>
+								<td align="center"><a class="button" href="/search?partnumber={{parts.disc_brake_front}}">Цены</a></td>
+							</tr>
+							<tr>
+								<td align="center">7</td>
+								<td>Диск тормозной, задний</td>
+								<td align="center">2 шт.</td>
+								<td align="center"><a class="button" href="/search?partnumber={{parts.disc_brake_rear}}">Цены</a></td>
+							</tr>
+							<tr>
+								<td align="center">8</td>
+								<td>Датчик тормозных колодок передний</td>
+								<td align="center">1 шт.</td>
+								<td align="center"><a class="button" href="/search?partnumber={{parts.sensor_brake_front}}">Цены</a></td>
+							</tr>
+							<tr>
+								<td align="center">9</td>
+								<td>Датчик тормозных колодок задний</td>
+								<td align="center">1 шт.</td>
+								<td align="center"><a class="button" href="/search?partnumber={{parts.sensor_brake_rear}}">Цены</a></td>
+							</tr>
+						</tbody>
+				</table>
+		</div>
+	</div>
+{% endif %}
+{% if page_not %}
+	<div style="height: 250px;">
+		<h3 style="padding-top:100px;text-align:center;">{{page_not}}</h3>
+	</div>
+{% endif %}
+
+{% endblock content %}

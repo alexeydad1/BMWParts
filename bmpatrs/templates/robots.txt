@@ -1,0 +1,18 @@
+User-agent: *
+Crawl-delay: 120.0
+Disallow: /admin
+Disallow: /lk
+Disallow: /add
+Disallow: /cart
+Disallow: /order
+Disallow: /search?partnumber=
+
+User-agent: Yandex
+Crawl-delay: 120.0
+Disallow: /admin
+Disallow: /lk
+Disallow: /add
+Disallow: /cart
+Disallow: /order
+
+Host: http://bmwminiparts.ru
